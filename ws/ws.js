@@ -55,6 +55,7 @@ class WebSocket {
      * Register root pathes
      */
     registerRoots() {
+        //http://locahost:port?token=123456
         this.app.get('/', (req, res) => {
             var _token = req.query.token
             if (!this.checkToken(_token)) {
@@ -65,6 +66,9 @@ class WebSocket {
 
             // Collect all text channels and put them into an
             // array as object { id, name }
+            //var server = this.client.guilds.get("252638472269987840");
+            var servername = this.client.guilds.get("252638472269987840").name;
+            var id = this.client.guilds.id
             var chans = []
             this.client.guilds.first().channels
                 .filter(c => c.type == 'text')
@@ -77,7 +81,9 @@ class WebSocket {
             res.render('index', { 
                 title: "SECRET INTERFACE", 
                 token: _token, 
-                chans 
+                servername,
+                id,
+                chans
             })
         })
     
@@ -85,19 +91,23 @@ class WebSocket {
             var _token = req.body.token
             var channelid = req.body.channelid
             var text = req.body.text
-
+            
             if(!_token || !channelid || !text)
                 return res.sendStatus(400);
     
             if (!this.checkToken(_token))
                 return res.sendStatus(401)
-    
-            var chan = this.client.guilds.first().channels.get(channelid)
+            
+                var server = this.client.guilds.get("252638472269987840").name;
+                var chan = this.client.guilds.first().channels.get(channelid)
     
             // catch post request and if token passes,
             // send message into selected channel
             if (chan) {
                 chan.send(text)
+                console.log('this is a test');
+               //console.log(chan)
+                console.log(server);
                 res.sendStatus(200)
             } else
                 res.sendStatus(406)
