@@ -2,6 +2,7 @@ module.exports = {
 	name: 'avatar',
 	aliases: ['icon'],
 	description: 'Get the avatar URL of the tagged user(s), or your own avatar.',
+	category: 'Users',
 	execute(message) {
 		if (!message.mentions.users.size) {
 			return message.channel.send(`Your avatar: ${message.author.displayAvatarURL}`);

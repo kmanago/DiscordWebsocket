@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'addrole',
-  description: 'Adds a new role to the user.',
+  description: 'Adds a role to the user.',
+  category: 'Roles',
   args: true,
   execute(message, args) {
 		if (!args[0]) {

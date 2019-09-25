@@ -1,10 +1,10 @@
 const fs = require('fs'); //nodejs file system
-const Discord = require('discord.js')
+const Discord = require('discord.js');
 //const { Client } = require('discord.js')
-const WS = require('./ws/ws')
+const WS = require('./ws/ws');
 
 // load config.json
-const config = require('./config.json')
+const config = require('./config.json');
 
 // Create Discord Bot Client
 //var client = new Client.Client()
@@ -12,8 +12,32 @@ const client = new Discord.Client();
 
 //create command collection and get all command files
 //client.commands = new Client.Collection();
-client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+client.commands = new Discord.Collection(); // Collection for all commands
+client.aliases = new Discord.Collection(); // Collection for all aliases of every command
+
+const modules = ['administration', 'misc', 'roles', 'users']; 
+// This will be the list of the names of all modules (folder) your bot owns
+
+modules.forEach(c => {
+	fs.readdir(`./commands/${c}/`, (err, files) => { // Here we go through all folders (modules)
+		if (err) throw err; // If there is error, throw an error in the console
+		console.log(`[Commandlogs] Loaded ${files.length} commands of module ${c}`); 
+		// When commands of a module are successfully loaded, you can see it in the console
+
+		files.forEach(f => { // Now we go through all files of a folder (module)
+			const command = require(`./commands/${c}/${f}`); // Location of the current command file
+			client.commands.set(command.name, command); // Now we add the commmand in the client.commands Collection which we defined in previous code
+			client.aliases.set(command.name,command.aliases);
+		});
+	});
+});	
+
+
+
+
+
+
+/*const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 
@@ -21,7 +45,7 @@ for (const file of commandFiles) {
 	// with the key as the command name and the value as the exported module
 	client.commands.set(command.name, command);
 }
-
+*/
 
 // inject config into client instance object
 client.config = config
@@ -48,8 +72,9 @@ client.on('message', message => {
 
     //checks for the command within the collection
 	//if (!client.commands.has(commandName)) return;
-    const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));;
-    if (!command) return;
+   const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+	//const command = client.commands.get(commandName);	
+   if (!command) return;
 
     //checks for command args
     if (command.args && !args.length) {

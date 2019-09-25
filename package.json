@@ -8,7 +8,9 @@
     "discord.js": "^11.5.1",
     "enmap": "^5.1.2",
     "express": "^4.17.1",
-    "express-handlebars": "^3.1.0"
+    "express-handlebars": "^3.1.0",
+    "form-data": "^2.5.1",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {},
   "scripts": {

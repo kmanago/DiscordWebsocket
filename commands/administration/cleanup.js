@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'cleanup',
 	description: 'Clean up to 99 messages.',
+	category: 'Administration',
 	execute(message, args) {
 		const amount = parseInt(args[0]) + 1;
 
