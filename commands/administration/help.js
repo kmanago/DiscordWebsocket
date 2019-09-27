@@ -31,7 +31,8 @@ module.exports = {
 					//data.push(cmd.name); //print name of the command
 					cmdNames += cmd.usage + '\n';
 				});
-				helpEmbed.addField(`__${cat}:__`, cmdNames, true);
+				let allcommands = "```" + cmdNames+ "```";
+				helpEmbed.addField(`__${cat}:__`, allcommands, true);
 				count++;
 				//data.push('\n');
 			});	
