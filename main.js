@@ -62,6 +62,38 @@ client.on('ready', () => {
     console.log(`Connected as ${client.user.tag}`)
 })
 
+//welcomemessage
+client.on("guildMemberAdd", (member) => {
+	//look for a channel with this name
+	const channel = member.guild.channels.find(ch => ch.name === 'arrivals');
+
+	//channel not found
+	if (!channel) return;
+	let guild = member.guild;
+		//channel.send(`Welcome ${member} to ${guild}!! ` + config.welcome);
+		//channel.send(config.welcome);
+		var wel = config.welcome;
+		var str = wel.replace(/{member}/g, `${member}`);
+		var welcome = str.replace(/{server}/g, `${guild}`);
+		channel.send(welcome);
+	});
+
+	client.on("guildMemberRemove", (member) => {
+		//look for a channel with this name
+		const channel = member.guild.channels.find(ch => ch.name === 'departures');
+	
+		//channel not found
+		if (!channel) return;
+
+		//get server and set the goodbye message up with the correct inputs
+		let guild = member.guild;
+		var gb = config.goodbye;
+		var str = gb.replace(/{member}/g, `${member}`);
+		var goodbye = str.replace(/{server}/g, `${guild}`);
+		channel.send(goodbye);
+		});
+	
+
 //message/command handling within discord
 client.on('message', message => {
     //check message prefix and the bot

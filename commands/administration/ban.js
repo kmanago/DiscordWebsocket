@@ -1,7 +1,8 @@
 module.exports = {
-    name: 'kban',
+    name: 'ban',
     description: 'Bans a member from the server. Add a reasoning.',
     category: 'Administration',
+    usage: '!ban [@user] [reason]',
     args: true,
     execute(message, args) {
           if (!args[0]) {
@@ -13,8 +14,23 @@ module.exports = {
           let hasAdmin = perms.has("ADMINISTRATOR");
           //only executes if user has ADMINISTRATOR permissions
           if(hasAdmin === true){
-              let names = args;
-              //ban the member
+            if (!message.mentions.users.size) {
+                return message.reply('you need to tag a user in order to kick them!');
+            }
+            else{
+                let taggedUser = message.mentions.users.first();
+              
+                if(!taggedUser){
+                    return message.reply("Please mention a valid user!")
+                }
+               
+                let reason = args.slice(1).join(' ');
+                if(!reason) reason = "No reason provided";
+                message.guild.member(taggedUser).ban(reason);
+                //message.delete(0);
+                message.channel.send(`${taggedUser.username} has been banned!`);
+                message.channel.send(`Reasoning: ${reason}`)
+            }    
              
               
           }

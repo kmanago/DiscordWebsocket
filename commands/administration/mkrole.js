@@ -2,6 +2,7 @@ module.exports = {
   name: 'mkrole',
   description: 'Creates a new role. You must have the ADMINISTRATOR permissions to run the command.',
   category: 'Administration',
+  usage: '!mkrole [role]',
   args: true,
   execute(message, args) {
 		if (!args[0]) {

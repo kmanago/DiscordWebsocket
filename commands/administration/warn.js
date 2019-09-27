@@ -2,6 +2,7 @@ module.exports = {
     name: 'Warn',
     description: 'Warns a member from the server. Add a reasoning.',
     category: 'Administration',
+    usage: '!warn [@user] [reason]',
     args: true,
     execute(message, args) {
           if (!args[0]) {

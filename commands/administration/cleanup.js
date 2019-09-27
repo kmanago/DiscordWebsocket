@@ -2,6 +2,7 @@ module.exports = {
 	name: 'cleanup',
 	description: 'Clean up to 99 messages. You must have the ADMINISTRATOR permissions to run the command.',
 	category: 'Administration',
+	usage: '!cleanup [# of posts]',
 	execute(message, args) {
 		let perms = message.member.permissions;
 		let hasAdmin = perms.has("ADMINISTRATOR");

@@ -2,6 +2,7 @@ module.exports = {
     name: 'delrole',
     description: 'Deletes the specified role. You must have the ADMINISTRATOR permissions to run the command.',
     category: 'Administration',
+    usage: '!delrole [role]',
     args: true,
     execute(message, args) {
           if (!args[0]) {

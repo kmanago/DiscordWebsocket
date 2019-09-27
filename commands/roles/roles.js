@@ -3,6 +3,7 @@ module.exports = {
 name: 'roles',
   description: 'Retrieves all possible roles within the server.',
   category: 'Roles',
+  usage: '!roles',
   execute(message, args) {
 		if (!args[0]) {
       // Get the Guild and store it under the variable "list"

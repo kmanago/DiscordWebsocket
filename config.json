@@ -1,7 +1,14 @@
 {
-    "token": "your discord bot token",
+    "prefix": "!",
+    "welcome": "Welcome {member} to {server}! Remember to look over the rules & and introduce yourself in the proper channel. Once you've done so, the mods will move you to the proper server so you get to meet everyone else",
+    "goodbye": "Goodbye {member}! We understand you have to continue that journey to bigger and better regions!",
+    "token": "NjI1NzQzODYzNDI4MDIyMjcy.XYzcuA.9QrkHiZwYRIkVNxLuVv3zexvpE0",
     "ws": {
         "port": 5665,
         "token": "123456"
+    },
+    "paths": {
+        "commands": "./commands",
+        "events": "./events"
     }
 }

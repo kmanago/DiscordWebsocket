@@ -2,6 +2,7 @@ module.exports = {
 	name: 'removerole',
   description: 'Removes a role to the user.',
   category: 'Roles',
+  usage: '!removerole [role]',
   args: true,
   execute(message, args) {
 		if (!args[0]) {
