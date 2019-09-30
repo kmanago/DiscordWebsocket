@@ -6,8 +6,9 @@ module.exports = {
 	aliases: ['commands'],
 	category: 'Administration',
 	usage: '!help (command name)',
-	cooldown: 5,
+	//cooldown: 5,
 	execute(message, args) {
+		console.log ('help is running')
 		const { commands } = message.client;
 		const modules = ['Administration', 'Fun', 'Misc', 'Roles', 'Users']; 
 		if (!args.length) {
@@ -18,7 +19,6 @@ module.exports = {
 			//for each module
 			var count = 0;
 			modules.forEach(cat => {
-				//data.push(`**${cat}** `); //print module category
 				//filter commands that are in this category
 				if(count == 2){
 					helpEmbed.addBlankField();
@@ -43,6 +43,7 @@ module.exports = {
 				.then(() => {
 					if (message.channel.type === 'dm') return;
 					message.reply('I\'ve sent you a DM with all my commands!');
+					console.error('sent help DM');
 				})
 				.catch(error => {
 					console.error(`Could not send help DM to ${message.author.tag}.\n`, error);

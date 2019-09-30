@@ -2,10 +2,13 @@ const fs = require('fs'); //nodejs file system
 const Discord = require('discord.js');
 //const { Client } = require('discord.js')
 const WS = require('./ws/ws');
+const Enmap = require("enmap");
+
 
 // load config.json
 const config = require('./config.json');
-const xp = require('./xp.json');
+//const xp = require('./xp.json');
+
 // Create Discord Bot Client
 //var client = new Client.Client()
 const client = new Discord.Client();
@@ -14,6 +17,9 @@ const client = new Discord.Client();
 //client.commands = new Client.Collection();
 client.commands = new Discord.Collection(); // Collection for all commands
 client.aliases = new Discord.Collection(); // Collection for all aliases of every command
+client.points = new Enmap({name: "points"});
+exports.points = client.points;
+
 
 const modules = ['administration', 'fun', 'misc', 'roles', 'users']; 
 // This will be the list of the names of all modules (folder) your bot owns
@@ -92,7 +98,7 @@ client.on('message', message => {
 	 *  xp system set up
 	 * 
 	 * 
-	 * *****************************************/ 
+	
 	let xpAdd = Math.floor(Math.random()*7)+ 8;
 	console.log(xpAdd);
 
@@ -116,17 +122,18 @@ client.on('message', message => {
 		
 		//level up message
 		let lvlID = config.emojis.lvlup;
-		let lvlup = new Discord.RichEmbed().setTitle(`${lvlID} Level Up!`)
+		let lvlup = new Discord.RichEmbed().setTitle(`${lvlID} Level Up!`);
 		lvlup.setColor(config.colors.purple);
 		lvlup.addField("New Level", curlvl +1);
 
-		message.channel.send(lvlup).then(msg => {msg.delete(5000)})
+		//message.channel.send(lvlup).then(msg => {msg.delete(5000)})
 	}
 	fs.writeFile("./xp.json", JSON.stringify(xp), (err) => {
 		if(err) console.logg(err);
 	});
 
-	console.log(`level is ${xp[message.author.id].level}`)
+	console.log(`level is ${xp[message.author.id].level}`);
+	 * *****************************************/ 
 	/**************************************
 	 * 
 	 * 
@@ -138,7 +145,42 @@ client.on('message', message => {
     //check message prefix and the bot
 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
 
-	const args = message.content.slice(config.prefix.length).split(/ +/);
+	/******************
+	 * enmap xp
+	 ******************/
+
+	 //makes sure this isn't in a DM
+	if(message.guild){
+		//a key variable to simplfy the worth of points
+		const key =`${message.guild.id}-${message.author.id}`;
+
+		//triggers on new users
+		 client.points.ensure(key, {
+			user: message.author.id,
+			guild: message.guild.id,
+			points: 0,
+			level: 1
+		  });
+		  client.points.inc(key, "points");
+
+		  // Calculate the user's current level
+		  const curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(key, "points")));
+    
+		  // Act upon level up by sending a message and updating the user's level in enmap.
+		  if (client.points.get(key, "level") < curLevel) {
+			message.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+			client.points.set(key, curLevel, "level");
+		  }
+	}
+
+	/******************
+	 * end of enmap xp
+	 ******************/
+
+
+
+	const args = message.content.slice(config.prefix.length).split(' ');
+	//const args = message.content.slice(config.prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
     //checks for the command within the collection
