@@ -1,8 +1,8 @@
 module.exports = {
-	name: 'rockpaperscissors',
+	name: 'rps',
 	description: 'Rock, Paper, Scissors against the bot. Pick your weapon of choice.',
-    category: 'Misc',
-    usage: '!rockpaperscissors <Rock | Paper | Scissors>',
+    category: 'Fun',
+    usage: '!rps <Rock | Paper | Scissors>',
 	execute(message, args) {
         if (!args[0]) {
             message.channel.send('No arguments were added! Will you pick **heads** or **tails**?');

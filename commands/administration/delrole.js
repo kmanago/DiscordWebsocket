@@ -23,7 +23,7 @@ module.exports = {
             });
         }
           else{
-              message.channel.send('You don\'t have the proper permissions to complete this action. Please ask a mod/moderator.');
+              message.channel.send(":no_entry: | ***You don't have permissions to do this action!***");
               console.log("User attempted to delete a role but doesn't have required permissions.");
           }
       }//end of execute

@@ -8,9 +8,8 @@ module.exports = {
 	usage: '!help (command name)',
 	cooldown: 5,
 	execute(message, args) {
-		const data = [];
 		const { commands } = message.client;
-		const modules = ['Administration', 'Misc', 'Roles', 'Users']; 
+		const modules = ['Administration', 'Fun', 'Misc', 'Roles', 'Users']; 
 		if (!args.length) {
 			const helpEmbed = new Discord.RichEmbed().setAuthor('SubiBot','https://cdn.bulbagarden.net/upload/thumb/a/a1/Substitute_artwork.png/200px-Substitute_artwork.png');
 			helpEmbed.setColor('#BAF0BA');

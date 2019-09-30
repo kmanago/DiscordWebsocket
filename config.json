@@ -1,6 +1,6 @@
 {
     "prefix": "!",
-    "welcome": "Welcome {member} to {server}! Remember to look over the rules & and introduce yourself in the proper channel. Once you've done so, the mods will move you to the proper server so you get to meet everyone else",
+    "welcome": "Welcome {member} to {server}! Remember to look over the rules & and introduce yourself in the proper channel. Once you've done so, you'll be allowed access to meet everyone else.",
     "goodbye": "Goodbye {member}! We understand you have to continue that journey to bigger and better regions!",
     "token": "your token here",
     "ws": {
@@ -10,5 +10,20 @@
     "paths": {
         "commands": "./commands",
         "events": "./events"
+    },
+    "emojis" : {
+        "no": "<:no:627948489695035462>",
+        "yes" : "<:yes:627948508086796308>",
+        "lvlup": "<:mariolevelup:628002543884042281>"
+    },
+    "colors": {
+        "red": "#e3847f",
+        "blue": "#7fa5e3",
+        "green": "#7fe381",
+        "purple": "#c57fe3",
+        "orange": "#e3ac7f",
+        "pink": "#e37fb4",
+        "yellow": "#e3d77f"
     }
 }
+    

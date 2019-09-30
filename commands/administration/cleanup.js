@@ -21,7 +21,7 @@ module.exports = {
 			});
 		}
 		else {
-			message.channel.send("***You don't have permissions to do this action!***");
+			message.channel.send(":no_entry: | ***You don't have permissions to do this action!***");
             console.log("User attempted to purge messages but doesn't have required permissions.");
 		}	
 		

@@ -12,13 +12,14 @@ name: 'roles',
       list.forEach(role =>{
         //data.push(cmd.name); //print name of the command
         if (role.name != '@everyone'){
-          listR += role.name + '\n';
+          let members = message.guild.roles.get(role.id).members;
+          listR += role.name + " " +members.size+" members"+'\n';
         }
         
       });
       //list.members.forEach(member => console.log(member.user.username)); 
       console.log(listR);
-      message.channel.send(listR);
+      message.channel.send("```" + listR + "```");
      // list.roles.forEach(role => message.channel.send(role.name)); 
     }    
   },

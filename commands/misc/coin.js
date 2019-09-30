@@ -1,8 +1,8 @@
 module.exports = {
-	name: 'cointoss',
+	name: 'coin',
 	description: 'Flip a coin. Heads or Tails?',
     category: 'Misc',
-    usage: '!cointoss <Heads | Tails> ',
+    usage: '!coin <Heads | Tails> ',
 	execute(message, args) {
         if (!args[0]) {
             message.channel.send('No arguments were added! Will you pick **heads** or **tails**?');

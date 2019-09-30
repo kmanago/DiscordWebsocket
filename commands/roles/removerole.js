@@ -1,26 +1,44 @@
+const config = require('../../config.json');
 module.exports = {
 	name: 'removerole',
-  description: 'Removes a role to the user.',
+  description: 'Removes a role or roles to the user.',
   category: 'Roles',
   usage: '!removerole [role]',
   args: true,
   execute(message, args) {
 		if (!args[0]) {
-        message.channel.send('No arguments were added!');
+        message.channel.send('No arguments were removeed!');
     } 
+    
     else {
-        let cmd = args[0];
-        let role = message.guild.roles.find(r => r.name === cmd);
-        if(message.member.roles.some(r=>(r.name === role)) ) {
-            // has one of the roles
-            console.log("user has role");
-          } else {
-            // has none of the roles
+        //let name = args[0];
+        let names = args;
+        let allroles = new Array();
+
+        names.forEach( name => {
+          let role = message.guild.roles.find(r => r.name === name);
+          let perms = message.member.permissions;
+          let hasAdmin = perms.has("ADMINISTRATOR");
+          
+          if(hasAdmin === false && (name === "mod" || name === "hiatus")){
+            console.log("User attempted to remove role and but doesn't have required permissions.");
+            return message.channel.send(":no_entry: | ***You don't have permissions to do this action!***");
           }
-        //message.member.addRole(role);
-        //message.channel.send("You have been given the new role: " + cmd);
+
+          else{
+            //message.member.removeRole(role);
+            //message.channel.send("You have been given the new role: " + name);
+            allroles.push(role);
+            console.log("User removed the role " + name + "from themselves.");
+            let user = message.author;
+            message.channel.send(config.emojis.yes + " | " + user +", You have removed the role: " + name);
+          }
+        });
+         
+          message.member.removeRoles(allroles);   
     }
 
   },
   
 };
+ 

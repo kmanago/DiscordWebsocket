@@ -34,10 +34,10 @@ module.exports = {
             });
             console.log("printing new welcome: " + config.welcome);
             let newmsg = "```" + config.welcome + "```";
-            message.channel.send("You have set a new welcome message: \n" + `${newmsg}`);
+            message.channel.send(config.emojis.yes+" | You have set a new welcome message: \n" + `${newmsg}`);
           }
           else{
-              message.channel.send("You don't have permissions to do this action!");
+            message.channel.send(":no_entry: | ***You don't have permissions to do this action!***");
               console.log("User attempted to ban a member but doesn't have required permissions.");
           }
         

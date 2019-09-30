@@ -5,7 +5,7 @@ const WS = require('./ws/ws');
 
 // load config.json
 const config = require('./config.json');
-
+const xp = require('./xp.json');
 // Create Discord Bot Client
 //var client = new Client.Client()
 const client = new Discord.Client();
@@ -15,7 +15,7 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection(); // Collection for all commands
 client.aliases = new Discord.Collection(); // Collection for all aliases of every command
 
-const modules = ['administration', 'misc', 'roles', 'users']; 
+const modules = ['administration', 'fun', 'misc', 'roles', 'users']; 
 // This will be the list of the names of all modules (folder) your bot owns
 
 modules.forEach(c => {
@@ -33,20 +33,6 @@ modules.forEach(c => {
 });	
 
 
-
-
-
-
-/*const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-
-	// set a new item in the Collection
-	// with the key as the command name and the value as the exported module
-	client.commands.set(command.name, command);
-}
-*/
-
 // inject config into client instance object
 client.config = config
 
@@ -54,11 +40,12 @@ client.config = config
 // port 5665 and passing the discord client instance
 var ws = new WS(config.ws.token, config.ws.port, client)
 
-
+//set a cool down
 const cooldowns = new Discord.Collection();
 
 // If the bot is ready, this event will be fired
 client.on('ready', () => {
+	client.user.setPresence({ game: { name: '!help' }, status: 'online' })
     console.log(`Connected as ${client.user.tag}`)
 })
 
@@ -74,7 +61,7 @@ client.on("guildMemberAdd", (member) => {
 		//channel.send(config.welcome);
 		var wel = config.welcome;
 		var str = wel.replace(/{member}/g, `${member}`);
-		var welcome = str.replace(/{server}/g, `${guild}`);
+		var welcome = str.replace(/{server}/g, `**${guild}**`);
 		channel.send(welcome);
 	});
 
@@ -94,8 +81,60 @@ client.on("guildMemberAdd", (member) => {
 		});
 	
 
+
+
+
 //message/command handling within discord
 client.on('message', message => {
+	/**************************************
+	 * 
+	 * 
+	 *  xp system set up
+	 * 
+	 * 
+	 * *****************************************/ 
+	let xpAdd = Math.floor(Math.random()*7)+ 8;
+	console.log(xpAdd);
+
+	//check if user has any xp
+	if(!xp[message.author.id]){
+		xp[message.author.id] = {
+			xp: 0,
+			level: 1
+		};
+	}
+
+	
+	let curxp = xp[message.author.id].xp;
+	let curlvl = xp[message.author.id].level;
+	let nxtLvl = curlvl * 200;
+	xp[message.author.id].xp = curxp + xpAdd;
+
+	//check if there's a level up
+	if(nxtLvl <= xp[message.author.id].xp){
+		xp[message.author.id].level = curlvl +1;
+		
+		//level up message
+		let lvlID = config.emojis.lvlup;
+		let lvlup = new Discord.RichEmbed().setTitle(`${lvlID} Level Up!`)
+		lvlup.setColor(config.colors.purple);
+		lvlup.addField("New Level", curlvl +1);
+
+		message.channel.send(lvlup).then(msg => {msg.delete(5000)})
+	}
+	fs.writeFile("./xp.json", JSON.stringify(xp), (err) => {
+		if(err) console.logg(err);
+	});
+
+	console.log(`level is ${xp[message.author.id].level}`)
+	/**************************************
+	 * 
+	 * 
+	 *  end of xp system
+	 * 
+	 * 
+	 * *****************************************/ 
+
     //check message prefix and the bot
 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
 
@@ -110,11 +149,16 @@ client.on('message', message => {
 
     //checks for command args
     if (command.args && !args.length) {
-        let reply = `You didn't provide any arguments, ${message.author}!`;
+		let noID = config.emojis.no;
+		let reply = `${noID} | You didn't provide any arguments, ${message.author}!`;
         if (command.usage) {
-        	reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
-        }
-        return message.channel.send(reply);
+
+        	reply += `\nThe proper usage would be: \`${command.usage}\``;
+		}
+		
+
+		//return message.channel.send(reply);
+		message.channel.send(reply);
     }
 
     //cooldown check
