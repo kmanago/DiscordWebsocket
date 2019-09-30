@@ -16,7 +16,9 @@ $ npm install discord.js express express-handlebars body-parser
 - [express](https://www.npmjs.com/package/express)
 - [express-handlebars](https://www.npmjs.com/package/express-handlebars)
 - [body-parser](https://www.npmjs.com/package/body-parser)
-
+- [enmap]
+- [canvas]
+- [canvas-constructor]
 ---
 
 ## Setup
