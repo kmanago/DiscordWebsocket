@@ -1,7 +1,7 @@
 const fs = require('fs'); //nodejs file system
 const Discord = require('discord.js');
 //const { Client } = require('discord.js')
-const WS = require('./ws/ws');
+//const WS = require('./ws/ws');
 const Enmap = require("enmap");
 
 
@@ -44,7 +44,7 @@ client.config = config
 
 // Create Websocket instance with token '123456',
 // port 5665 and passing the discord client instance
-var ws = new WS(config.ws.token, config.ws.port, client)
+//var ws = new WS(config.ws.token, config.ws.port, client)
 
 //set a cool down
 const cooldowns = new Discord.Collection();
@@ -159,16 +159,24 @@ client.on('message', message => {
 			user: message.author.id,
 			guild: message.guild.id,
 			points: 0,
-			level: 1
+			level: 1,
+			coins: 500,
+			color: '#7289DA'
 		  });
-		  client.points.inc(key, "points");
+		  //client.points.inc(key, "points");
+		  const newpoints = Math.floor(Math.random()*7)+ 15;
+		  const newcoins = Math.floor(Math.random()*7)+ 8;
+		  client.points.math(key, "+",newpoints, "points");
+		  client.points.math(key, "+",newcoins, "coins");
 
 		  // Calculate the user's current level
 		  const curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(key, "points")));
     
 		  // Act upon level up by sending a message and updating the user's level in enmap.
 		  if (client.points.get(key, "level") < curLevel) {
-			message.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+			let lvlID = config.emojis.lvlup;
+			message.reply(`${lvlID}**Congrats!** You've leveled up to level **${curLevel}**! Keep going!`);
+			client.points.math(key, "+",200, "coins");
 			client.points.set(key, curLevel, "level");
 		  }
 	}
@@ -217,7 +225,14 @@ client.on('message', message => {
 
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+			const hours = Math.floor(timeLeft / 3600);
+			const time = timeLeft - hours * 3600;
+			const minutes = Math.floor(time/60);
+			const seconds = time - minutes * 60;
+
+			return message.reply(`please wait ${hours} hour(s), ${minutes} minute(s), and ${seconds.toFixed(0)} second(s) before reusing the \`${command.name}\` command.`);
+
+			//return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
 		}
 	}
 

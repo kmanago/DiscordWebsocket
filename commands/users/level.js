@@ -1,14 +1,14 @@
 const Discord = require('discord.js');
-const Enmap = require("enmap");
+
 const config = require('../../config.json');
 let purple = config.colors.purple;
-let xp = require ("../../xp.json");
+
 var source = require('../../main.js');
 var pts = source.points;
 module.exports = {
     name: 'level',
     description: '',
-    category: 'users',
+    category: 'Users',
     usage: '!level',
     async execute(message, args) {
         /*console.log(pts);

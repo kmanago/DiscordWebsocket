@@ -1,11 +1,11 @@
 const config = require('../../config.json');
 const r2          = require('r2');
 var querystring = require('querystring');
-const DOG_API_URL   = "https://api.thecatapi.com/"
-const DOG_API_KEY   = "your api key here"; // get a free key from - https://thedogapi.com/signup
+const CAT_API_URL   = "https://api.thecatapi.com/"
+const CAT_API_KEY   = config.catkey; // get a free key from - https://theCATapi.com/signup
 module.exports = {
 	name: 'cat',
-	cooldown: 5,
+	cooldown: 20,
 	description: 'Get a random cat!',
 	category: 'Fun',
 	usage: '!cat',
@@ -39,7 +39,7 @@ async function messageRecieved(message)
         {
         // you need an API key to get access to all the iamges, or see the requests you've made in the stats for your account
         var headers = {
-            'X-API-KEY': DOG_API_KEY,
+            'X-API-KEY': CAT_API_KEY,
         }
         var query_params = {
             'has_breeds':true, // we only want images with at least one breed data object - name, temperament etc
@@ -53,7 +53,7 @@ async function messageRecieved(message)
     
         try {
             // construct the API Get request url
-            let _url = DOG_API_URL + `v1/images/search?${queryString}`;
+            let _url = CAT_API_URL + `v1/images/search?${queryString}`;
             // make the request passing the url, and headers object which contains the API_KEY
             var response = await r2.get(_url , {headers} ).json
         } catch (e) {

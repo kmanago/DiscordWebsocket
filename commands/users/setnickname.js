@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'setnickname',
   description: 'Changes users nickname',
-  category: 'users',
+  category: 'Users',
   usage: '!setnickname [new name]',
   args: true,
   execute(message, args) {

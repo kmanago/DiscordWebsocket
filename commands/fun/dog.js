@@ -2,10 +2,10 @@ const config = require('../../config.json');
 const r2          = require('r2');
 var querystring = require('querystring');
 const DOG_API_URL   = "https://api.thedogapi.com/"
-const DOG_API_KEY   = "your api key here"; // get a free key from - https://thedogapi.com/signup
+const DOG_API_KEY   = config.dogkey; // get a free key from - https://thedogapi.com/signup
 module.exports = {
 	name: 'dog',
-	cooldown: 5,
+	cooldown: 20,
 	description: 'Get a random dog!',
 	category: 'Fun',
 	usage: '!dog',

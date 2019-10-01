@@ -1,30 +1,23 @@
 
-const Enmap = require("enmap");
-//const config = require('../../config.json');
 const { Canvas } = require("canvas-constructor"); // You can't make images without this.
-const { resolve, join } = require("path"); // This is to get a font file.
 const { Attachment } = require("discord.js"); // This is to send the image via discord.
 const fetch = require("node-fetch"); // This is to fetch the user avatar and convert it to a buffer.
 const imageUrlRegex = /\?size=2048$/g;
-
+Canvas.registerFont('./fonts/rubik/rubik-regular.ttf', { family: 'Rubik' })
 var source = require('../../main.js');
 var pts = source.points;
-
-
-
-
 
 module.exports = {
     name: 'profile',
     description: 'Display user profile',
-    category: 'users',
+    category: 'Users',
     usage: '!profile',
     async execute(message, args) {
         //function to create the card
         async function profile(member, score) {
             const key = `${message.guild.id}-${message.author.id}`;
             // We only need the level, and points values, we don't need the user or guild id.
-            const { level, points } = pts.get(key);
+            const { level, points, color, coins } = pts.get(key);
         
             // We're grabbing the body out of snekfetch's get method, but at the same time we're assigning a variable
             // to it, avatar.
@@ -41,16 +34,19 @@ module.exports = {
             // to the 17th index and cut the rest off, then append `...`.
             const name = member.displayName.length > 20 ? member.displayName.substring(0, 17) + "..." : member.displayName;
         
-            let profile = new Canvas(400, 180)
+            let profile = new Canvas(400, 250)
             // Create the Blurple rectangle on the right side of the image.
-            .setColor("#7289DA")
-            .addRect(84, 0, 316, 180)
+            //.setColor("#7289DA")
+            .setColor(`${color.toLocaleString()}`)
+            .addRect(84, 0, 316, 350)
             // Create the "Dark, but not black" boxes for the left side of the image
             // and the text boxes on the right.
             .setColor("#2C2F33")
-            .addRect(0, 0, 84, 180)
+            .addRect(0, 0, 84, 350)
             .addRect(169, 26, 231, 46)
             .addRect(224, 108, 176, 46)
+            .setColor("#23272A")
+            .addRect(10,200,380,50)
             // Create a shadow effect for the avatar placement.
             .setShadowColor("rgba(22, 22, 22, 1)") // This is a nice colour for a shadow.
             .setShadowOffsetY(5) // Drop the shadow by 5 pixels.
@@ -69,7 +65,7 @@ module.exports = {
             // Let's center the text
             .setTextAlign("center")
             // I'm using a custom font, which I will show you how to add next.
-            .setTextFont("10px")
+            .setTextFont("12px Rubik")
             // Set the colour to white, since we have a dark background for all the text boxes.
             .setColor("#FFFFFF")
             // Add the name variable.
@@ -80,7 +76,8 @@ module.exports = {
             // Now we want to align the text to the left.
             .setTextAlign("left")
             // Let's add all the points!
-            .addText(`Score: ${points.toLocaleString()}`, 241, 136)
+            .addText(`Coins: ${coins.toLocaleString()}`, 241, 136)
+            .addText(`Score: ${points.toLocaleString()}`, 100, 235)
             .toBuffer()
 
             return (profile);
