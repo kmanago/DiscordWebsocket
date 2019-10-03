@@ -6,11 +6,7 @@ module.exports = {
   usage: '!unsetrole [role]',
   args: true,
   execute(message, args) {
-		if (!args[0]) {
-        message.channel.send('No arguments were unseted!');
-    } 
-    
-    else {
+	
         //a user must be tagged when unsetting roles
         let taggedUser = message.mentions.users.first();
           if(!taggedUser){
@@ -38,7 +34,6 @@ module.exports = {
         message.guild.member(taggedUser).removeRoles(allroles)
         console.log(`${taggedUser.username} now has ${allroles.join("")} role(s) removed.`);
         message.channel.send(config.emojis.yes +` | ${taggedUser.username} now has ${allroles.join("")} role(s) removed.`);
-    }
 
   },
   
