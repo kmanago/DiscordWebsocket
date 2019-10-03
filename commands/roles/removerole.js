@@ -6,11 +6,6 @@ module.exports = {
   usage: '!removerole [role]',
   args: true,
   execute(message, args) {
-		if (!args[0]) {
-        message.channel.send('No arguments were removeed!');
-    } 
-    
-    else {
         //let name = args[0];
         let names = args;
         let allroles = new Array();
@@ -36,9 +31,7 @@ module.exports = {
         });
          
           message.member.removeRoles(allroles);   
-    }
-
-  },
+   },
   
 };
  

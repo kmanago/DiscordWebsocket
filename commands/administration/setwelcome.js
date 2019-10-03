@@ -8,10 +8,6 @@ module.exports = {
     usage: '!setwelcome [message]',
     args: true,
     execute(message, args) {
-          if (!args[0]) {
-          message.channel.send('No arguments were added!');
-      } 
-      else {
           //gets permissions of caller and check if they're an admin
           let perms = message.member.permissions;
           let hasAdmin = perms.has("ADMINISTRATOR");
@@ -40,9 +36,7 @@ module.exports = {
             message.channel.send(":no_entry: | ***You don't have permissions to do this action!***");
               console.log("User attempted to ban a member but doesn't have required permissions.");
           }
-        
-      }
-  
+ 
     },
 };
    

@@ -6,11 +6,6 @@ module.exports = {
   usage: '!setrole [role]',
   args: true,
   execute(message, args) {
-		if (!args[0]) {
-        message.channel.send('No arguments were seted!');
-    } 
-    
-    else {
         //a user must be tagged when setting roles
         let taggedUser = message.mentions.users.first();
           if(!taggedUser){
@@ -38,8 +33,6 @@ module.exports = {
         message.guild.member(taggedUser).setRoles(allroles)
         console.log(`${taggedUser.username} now has ${allroles.join("")} role(s).`);
         message.channel.send(config.emojis.yes + ` | ${taggedUser.username} now has ${allroles.join("")} role(s).`);
-    }
-
   },
   
 };

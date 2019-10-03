@@ -21,7 +21,7 @@ const wild = new SlotSymbol('wild', {
  
 const machine = new SlotMachine(3, [cherry, money, wild]);
 var source = require('../../main.js');
-var pts = source.points;
+var userprofile = source.up;
 module.exports = {
 	name: 'slots',
 	description: 'Play your luck at the slots! To play costs 200 coins.',
@@ -29,13 +29,13 @@ module.exports = {
 	usage: '!slots',
 	execute(message, args) {
         const key =`${message.guild.id}-${message.author.id}`;
-        const currentPts = pts.get(key, "coins");
-        if(currentPts <= 200){
+        const currentPoints= userprofile.get(key, "coins");
+        if(currentPoints <= 200){
             return message.channel.send("You don't have enough coins to play....Collect your dailies, gain a new level, or keep being active to earn more. Minimum amount of coins needed is 200.");
         }
         
-        pts.math(key, "-",200, "coins");
-        //console.log(currentPts);
+        userprofile.math(key, "-",200, "coins");
+        //console.log(currentuserprofile);
 
         const results = machine.play();
         message.channel.send(results.visualize());
@@ -43,7 +43,7 @@ module.exports = {
         //console.log(results.totalPoints, results.winCount);
         if(results.totalPoints != 0){
             message.channel.send(`Congrats! You won ` + results.totalPoints + ' coins! :money_mouth: ');
-            pts.math(key, "+",results.totalPoints, "coins");
+            userprofile.math(key, "+",results.totalPoints, "coins");
           //  console.log(earnings);
         }
         else{

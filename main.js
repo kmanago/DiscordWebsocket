@@ -17,8 +17,8 @@ const client = new Discord.Client();
 //client.commands = new Client.Collection();
 client.commands = new Discord.Collection(); // Collection for all commands
 client.aliases = new Discord.Collection(); // Collection for all aliases of every command
-client.points = new Enmap({name: "points"});
-exports.points = client.points;
+client.userprofile = new Enmap({name: "profile"});
+exports.up = client.userprofile;
 
 
 const modules = ['administration', 'fun', 'misc', 'roles', 'users']; 
@@ -92,55 +92,6 @@ client.on("guildMemberAdd", (member) => {
 
 //message/command handling within discord
 client.on('message', message => {
-	/**************************************
-	 * 
-	 * 
-	 *  xp system set up
-	 * 
-	 * 
-	
-	let xpAdd = Math.floor(Math.random()*7)+ 8;
-	console.log(xpAdd);
-
-	//check if user has any xp
-	if(!xp[message.author.id]){
-		xp[message.author.id] = {
-			xp: 0,
-			level: 1
-		};
-	}
-
-	
-	let curxp = xp[message.author.id].xp;
-	let curlvl = xp[message.author.id].level;
-	let nxtLvl = curlvl * 200;
-	xp[message.author.id].xp = curxp + xpAdd;
-
-	//check if there's a level up
-	if(nxtLvl <= xp[message.author.id].xp){
-		xp[message.author.id].level = curlvl +1;
-		
-		//level up message
-		let lvlID = config.emojis.lvlup;
-		let lvlup = new Discord.RichEmbed().setTitle(`${lvlID} Level Up!`);
-		lvlup.setColor(config.colors.purple);
-		lvlup.addField("New Level", curlvl +1);
-
-		//message.channel.send(lvlup).then(msg => {msg.delete(5000)})
-	}
-	fs.writeFile("./xp.json", JSON.stringify(xp), (err) => {
-		if(err) console.logg(err);
-	});
-
-	console.log(`level is ${xp[message.author.id].level}`);
-	 * *****************************************/ 
-	/**************************************
-	 * 
-	 * 
-	 *  end of xp system
-	 * 
-	 * 
-	 * *****************************************/ 
 
     //check message prefix and the bot
 	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
@@ -155,29 +106,35 @@ client.on('message', message => {
 		const key =`${message.guild.id}-${message.author.id}`;
 
 		//triggers on new users
-		 client.points.ensure(key, {
+		 client.userprofile.ensure(key, {
 			user: message.author.id,
 			guild: message.guild.id,
 			points: 0,
 			level: 1,
 			coins: 500,
-			color: '#7289DA'
+			bgcolor: '#f2f2f2',
+			maincolor: '#BAF0BA',
+			txtcolor: '#23272A',
+			title: 'This is a Title',
+			info: 'This is some text to act as my own personal status/info/about me. Whatever. Good news! It wraps text on its own.',
+			headerimg: 'https://pbs.twimg.com/media/CkCp_VhWYAAJcrU.jpg',
+			lastSeen: new Date()
 		  });
-		  //client.points.inc(key, "points");
+		  //client.userprofile.inc(key, "points");
 		  const newpoints = Math.floor(Math.random()*7)+ 15;
 		  const newcoins = Math.floor(Math.random()*7)+ 8;
-		  client.points.math(key, "+",newpoints, "points");
-		  client.points.math(key, "+",newcoins, "coins");
+		  client.userprofile.math(key, "+",newpoints, "points");
+		  client.userprofile.math(key, "+",newcoins, "coins");
 
 		  // Calculate the user's current level
-		  const curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(key, "points")));
+		  const curLevel = Math.floor(0.1 * Math.sqrt(client.userprofile.get(key, "points")))+1;
     
 		  // Act upon level up by sending a message and updating the user's level in enmap.
-		  if (client.points.get(key, "level") < curLevel) {
+		  if (client.userprofile.get(key, "level") < curLevel) {
 			let lvlID = config.emojis.lvlup;
-			message.reply(`${lvlID}**Congrats!** You've leveled up to level **${curLevel}**! Keep going!`);
-			client.points.math(key, "+",200, "coins");
-			client.points.set(key, curLevel, "level");
+			message.reply(`${lvlID}**Congrats!** You've leveled up to **Level ${curLevel}**! Keep going!`);
+			client.userprofile.math(key, "+",200, "coins");
+			client.userprofile.set(key, curLevel, "level");
 		  }
 	}
 

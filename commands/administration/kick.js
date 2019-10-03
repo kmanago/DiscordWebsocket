@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 module.exports = {
     name: 'kick',
     description: 'Kicks a member from the server. Add a reasoning.',
@@ -5,10 +6,7 @@ module.exports = {
     usage: '!kick [@user] [reason]',
     args: true,
     execute(message, args) {
-          if (!args[0]) {
-          message.channel.send('No arguments were added!');
-      } 
-      else {
+  
           //gets permissions of caller and check if they're an admin
           let perms = message.member.permissions;
           let hasAdmin = perms.has("ADMINISTRATOR");
@@ -23,24 +21,42 @@ module.exports = {
                 if(!taggedUser){
                     return message.reply("Please mention a valid user!")
                 }
-               /* if(!taggedUser.kickable){
-                    return message.reply("I cannot kick this user!");
-                }*/
+ 
+                //looks for the mod-log channel
+                let modlog = message.guild.channels.find('name', 'mod-log');
+                if (!modlog){
+                    return message.reply('I cannot find a mod-log channel.');
+                }
+
                 let reason = args.slice(1).join(' ');
-                if(!reason) reason = "No reason provided";
+                if(!reason){
+                   return message.reply('You must supply a reason for kicking.');
+                }
+
+                //makes sure the member is kickable
+                if (!message.guild.member(taggedUser).kickable){
+                    return message.reply('I cannot kick that member');
+                }
+
+                //kick the member and supply it to the mod-log
                 message.guild.member(taggedUser).kick(reason);
-                message.channel.send(`You kicked: ${taggedUser.username}`);
-            }    
-              
+                const embed = new Discord.RichEmbed()
+                .setColor(0x00AE86)
+                .setTimestamp()
+                .addField('Action:', 'Kick')
+                .addField('User:', `${taggedUser.username}#${taggedUser.discriminator} (${taggedUser.id})`)
+                .addField('Moderator:', `${message.author.username}#${message.author.discriminator}`)
+                .addField('Reason', reason);
+                return message.guild.channels.get(modlog.id).sendEmbed(embed);
+            }      
           }
+
           else{
             message.channel.send(":no_entry: | ***You don't have permissions to do this action!***");
               console.log("User attempted to kick a member but doesn't have required permissions.");
           }
         
-      }
-  
-    },
+      },
     
   };
    

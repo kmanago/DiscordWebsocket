@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 module.exports = {
-    name: 'ban',
-    description: 'Bans a member from the server. Add a reasoning.',
+    name: 'unban',
+    description: 'Unbans a member from the server. Add a reasoning.',
     category: 'Administration',
-    usage: '!ban [@user] [reason]',
+    usage: '!unban [user id] [reason]',
     args: true,
     execute(message, args) {
 
@@ -16,10 +16,10 @@ module.exports = {
                 return message.reply('you need to tag a user in order to kick them!');
             }
             else{
-                let taggedUser = message.mentions.users.first();
+                let statedUser = args [0];
               
-                if(!taggedUser){
-                    return message.reply("Please mention a valid user!")
+                if(!statedUser){
+                    return message.reply("You must supply a User Resolvable, such as a user id. Check the previous logs for user ids.")
                 }
 
                 //checks for modlog channel
@@ -33,18 +33,13 @@ module.exports = {
                    return message.reply('You must supply a reason for kicking.');
                 }
 
-                //makes sure the member is kickable
-                if (!message.guild.member(taggedUser).bannable){
-                    return message.reply('I cannot ban that member.');
-                }
-
                 //ban the member and supply it to the log
-                message.guild.member(taggedUser).ban(reason);
+                message.guild.member(statedUser).unban(reason);
                 const embed = new Discord.RichEmbed()
                 .setColor(0x00AE86)
                 .setTimestamp()
-                .addField('Action:', 'Ban')
-                .addField('User:', `${taggedUser.username}#${taggedUser.discriminator} (${taggedUser.id})`)
+                .addField('Action:', 'Unban')
+                .addField('User:', `${statedUser.username}#${statedUser.discriminator} (${statedUser.id})`)
                 .addField('Moderator:', `${message.author.username}#${message.author.discriminator}`)
                 .addField('Reason', reason);
                 return message.guild.channels.get(modlog.id).sendEmbed(embed);

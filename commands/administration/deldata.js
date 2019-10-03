@@ -1,5 +1,5 @@
 var source = require('../../main.js');
-var pts = source.points;
+var userprofile = source.up;
 
 module.exports = {
     name: 'deldata',
@@ -11,7 +11,7 @@ module.exports = {
     // and those who haven't been around for... say a month.
       if (args[0] === 'all'){
         // Get a filtered list (for this guild only).
-        const filtered = pts.filter( p => p.guild === message.guild.id );
+        const filtered = userprofile.filter( p => p.guild === message.guild.id );
 
         // We then filter it again (ok we could just do this one, but for clarity's sake...)
         // So we get only users that haven't been online for a month, or are no longer in the guild.
@@ -20,7 +20,7 @@ module.exports = {
         });
 
         toRemove.forEach(data => {
-          pts.delete(`${message.guild.id}-${data.user}`);
+          userprofile.delete(`${message.guild.id}-${data.user}`);
         });
 
         message.channel.send(`I've cleaned up ${toRemove.size} old farts.`);
@@ -29,7 +29,7 @@ module.exports = {
       //removes users who have not been seen within a month
       else{
           // Get a filtered list (for this guild only).
-          const filtered = pts.filter( p => p.guild === message.guild.id );
+          const filtered = userprofile.filter( p => p.guild === message.guild.id );
 
           // We then filter it again (ok we could just do this one, but for clarity's sake...)
           // So we get only users that haven't been online for a month, or are no longer in the guild.
@@ -39,7 +39,7 @@ module.exports = {
             return !message.guild.members.has(data.user) || rightNow - 2592000000 > data.lastSeen;
           })
           toRemove.forEach(data => {
-            pts.delete(`${message.guild.id}-${data.user}`);
+            userprofile.delete(`${message.guild.id}-${data.user}`);
           });
 
           message.channel.send(`I've cleaned up ${toRemove.size} old farts.`);

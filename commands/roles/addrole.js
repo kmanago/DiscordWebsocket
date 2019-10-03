@@ -6,11 +6,6 @@ module.exports = {
   usage: '!addrole [role]',
   args: true,
   execute(message, args) {
-		if (!args[0]) {
-        message.channel.send(':no: | No arguments were added!');
-    } 
-    
-    else {
         //let name = args[0];
         let names = args;
         let allroles = new Array();
@@ -36,8 +31,7 @@ module.exports = {
         });
          
           message.member.addRoles(allroles);   
-    }
-
+ 
   },
   
 };

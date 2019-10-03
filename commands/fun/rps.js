@@ -3,12 +3,8 @@ module.exports = {
 	description: 'Rock, Paper, Scissors against the bot. Pick your weapon of choice.',
     category: 'Fun',
     usage: '!rps <Rock | Paper | Scissors>',
+    args: true,
 	execute(message, args) {
-        if (!args[0]) {
-            message.channel.send('No arguments were added! Will you pick **heads** or **tails**?');
-        } 
-        
-        else{
             let choice = args[0];
             let rps = [ 'Rock','Paper','Scissors'];
             let rpsResults = rps[Math.floor(Math.random()*rps.length)];
@@ -53,7 +49,6 @@ module.exports = {
                 }
             }      
 
-        }
-        
+
 	},
 };

@@ -5,10 +5,6 @@ module.exports = {
   usage: '!mkrole [role]',
   args: true,
   execute(message, args) {
-		if (!args[0]) {
-        message.channel.send('No arguments were added!');
-    } 
-    else {
         //gets permissions of caller and check if they're an admin
         let perms = message.member.permissions;
         let hasAdmin = perms.has("ADMINISTRATOR");
@@ -32,9 +28,6 @@ module.exports = {
             console.log("User attempted to create a role but doesn't have required permissions.");
         }
       
-    }
-
-  },
-  
+    },
 };
  

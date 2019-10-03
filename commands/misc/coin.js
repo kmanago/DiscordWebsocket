@@ -3,12 +3,8 @@ module.exports = {
 	description: 'Flip a coin. Heads or Tails?',
     category: 'Misc',
     usage: '!coin <Heads | Tails> ',
+    args: true,
 	execute(message, args) {
-        if (!args[0]) {
-            message.channel.send('No arguments were added! Will you pick **heads** or **tails**?');
-        } 
-        
-        else{
             let choice = args[0];
             let coin = [ 'Heads','Tails'];
             let coinResults = coin[Math.floor(Math.random()*coin.length)];
@@ -22,7 +18,5 @@ module.exports = {
                 message.channel.send('**'+coinResults+"!** You **lose**! Better luck next time.");
             }
 
-        }
-        
 	},
 };

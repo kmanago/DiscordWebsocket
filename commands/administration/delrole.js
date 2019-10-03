@@ -5,10 +5,7 @@ module.exports = {
     usage: '!delrole [role]',
     args: true,
     execute(message, args) {
-          if (!args[0]) {
-          message.channel.send('No arguments were added!');
-      } 
-      else {
+          
         //checks if user who called is a mod role first
         let perms = message.member.permissions;
 		let hasAdmin = perms.has("ADMINISTRATOR");
@@ -27,8 +24,6 @@ module.exports = {
               console.log("User attempted to delete a role but doesn't have required permissions.");
           }
       }//end of execute
-  
-    },
     
   };
    
