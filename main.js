@@ -112,6 +112,7 @@ client.on('message', message => {
 			points: 0,
 			level: 1,
 			coins: 500,
+			warnlevel: 0,
 			bgcolor: '#f2f2f2',
 			maincolor: '#BAF0BA',
 			txtcolor: '#23272A',

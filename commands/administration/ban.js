@@ -47,7 +47,8 @@ module.exports = {
                 .addField('User:', `${taggedUser.username}#${taggedUser.discriminator} (${taggedUser.id})`)
                 .addField('Moderator:', `${message.author.username}#${message.author.discriminator}`)
                 .addField('Reason', reason);
-                return message.guild.channels.get(modlog.id).sendEmbed(embed);
+                message.guild.member(taggedUser).send(embed);
+                return message.guild.channels.get(modlog.id).send(embed);
             }    
              
               

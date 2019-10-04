@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+var source = require('../../main.js');
+var userprofile = source.up;
 module.exports = {
     name: 'warn',
     description: 'Warns a member from the server. Add a reasoning.',
@@ -35,17 +37,25 @@ module.exports = {
 
                 //warn the member and supply it to the mod-log
                 //message.guild.member(taggedUser).warn(reason);
+                const key = `${message.guild.id}-${taggedUser.id}`;
+                userprofile.inc(key, "warnlevel");
+                let warnlevel = `${userprofile.get(key, "warnlevel")}`;
+
                 const embed = new Discord.RichEmbed()
-                .setColor(0x00AE86)
+                .setColor('#fc6400')
                 .setTimestamp()
                 .addField('Action:', 'Warning')
                 .addField('User:', `${taggedUser.username}#${taggedUser.discriminator} (${taggedUser.id})`)
+                .addField('Warned In:', message.channel)
+                .addField('Number of Warnings:', warnlevel)
                 .addField('Moderator:', `${message.author.username}#${message.author.discriminator}`)
-                .addField('Reason', reason);
-     
-                //const taggedUserID = taggedUser.id;
-                //message.guild.users.get(taggedUserID).sendEmbed(embed);
+                .addField('Reason', reason)
+                .setFooter('3 Warnings = Banned from Server');
                 message.guild.channels.get(modlog.id).send(embed);
+                message.guild.member(taggedUser).send(embed);
+                if(warnlevel >= 3){
+                    message.reply(`${taggedUser} has been banned.`)
+                }
             }      
           }
 
