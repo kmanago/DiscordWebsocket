@@ -61,8 +61,7 @@ package-lock.json
 # next.js build output
 .next
 .vs/*
-config.json
 data/enmap.sqlite
 data/enmap.sqlite-wal
 data/enmap.sqlite-shm
-
+config.json
