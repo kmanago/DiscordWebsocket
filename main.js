@@ -4,7 +4,6 @@ const Discord = require('discord.js');
 //const WS = require('./ws/ws');
 const Enmap = require("enmap");
 
-
 // load config.json
 const config = require('./config.json');
 //const xp = require('./xp.json');

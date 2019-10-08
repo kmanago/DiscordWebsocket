@@ -2,7 +2,7 @@ const config = require('../../config.json');
 const r2          = require('r2');
 var querystring = require('querystring');
 const CAT_API_URL   = "https://api.thecatapi.com/"
-const CAT_API_KEY   = config.catkey; // get a free key from - https://theCATapi.com/signup
+const CAT_API_KEY   = config.apikeys.cat; // get a free key from - https://theCATapi.com/signup
 module.exports = {
 	name: 'cat',
 	cooldown: 20,
