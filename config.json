@@ -1,8 +1,15 @@
 {
-    "prefix": "!",
-    "welcome": "Welcome {member} to {server}! Remember to look over the rules & and introduce yourself in the proper channel. Once you've done so, you'll be allowed access to meet everyone else.",
-    "goodbye": "Goodbye {member}! We understand you have to continue that journey to bigger and better regions!",
-    "token": "your token",
+    "settings": {
+        "prefix": "!",
+        "modLogChannel": "mod-log",
+        "modRole": "Moderator",
+        "adminRole": "Administrator",
+        "welcomeChannel": "arrivals",
+        "welcome": "Welcome {member} to {server}! Remember to look over the rules & and introduce yourself in the proper channel. Once you've done so, you'll be allowed access to meet everyone else.",
+        "goodbyeChannel": "depatures",
+        "goodbye": "Goodbye {member}! We understand you have to continue that journey to bigger and better regions!"
+    },
+    "token": "yourtoken",
     "ws": {
         "port": 5665,
         "token": "123456"
@@ -17,8 +24,8 @@
         "lvlup": "<:mariolevelup:628002543884042281>"
     },
     "apikeys": {
-        "dog": "yourkey",
-        "cat": "yourkey"
+        "dog": "yourapikey",
+        "cat": "yourapikey"
     },
     "colors": {
         "red": "#e3847f",
