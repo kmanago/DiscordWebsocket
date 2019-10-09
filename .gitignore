@@ -65,3 +65,4 @@ data/enmap.sqlite
 data/enmap.sqlite-wal
 data/enmap.sqlite-shm
 config.json
+config.json

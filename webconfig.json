@@ -1,0 +1,8 @@
+{
+    "port": 3000,
+    "domain": "localhost",
+    "clientId": "625743863428022272",
+    "clientSecret": "OQ6LfR7dZQgVrG6rPvyxzhKkwN3zm53e",
+    "scopes": ["identify", "guilds"],
+    "redirectUri": "http://localhost:3000/authorize/callback"
+}

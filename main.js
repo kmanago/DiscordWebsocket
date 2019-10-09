@@ -10,6 +10,33 @@ const config = require('./config.json');
 
 // Create Discord Bot Client
 //var client = new Client.Client()
+
+/******************
+	 * dashboard
+
+const express = require('express');
+const app = express();
+
+let port = require('./webconfig.json').port || 3000;
+app.set('port', port);
+
+const session = require('express-session');
+
+app.set('view engine', 'ejs');
+app.use(express.static('dashboard'));
+app.use(session({
+    secret: '48738924783748273742398747238',
+    resave: false,
+    saveUninitialized: false,
+    expires: 604800000,
+}));
+require('./router')(app);
+
+app.listen(port, () => console.info(`Listening on port ${port}`));
+
+	 * enddashboard
+	 ******************/
+
 const client = new Discord.Client();
 
 //create command collection and get all command files
@@ -39,7 +66,7 @@ modules.forEach(c => {
 
 
 // inject config into client instance object
-client.config = config
+client.config = config;
 
 // Create Websocket instance with token '123456',
 // port 5665 and passing the discord client instance
@@ -93,7 +120,7 @@ client.on("guildMemberAdd", (member) => {
 client.on('message', message => {
 
     //check message prefix and the bot
-	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
+	if (!message.content.startsWith(config.settings.prefix) || message.author.bot) return;
 
 	/******************
 	 * enmap xp
@@ -136,6 +163,35 @@ client.on('message', message => {
 			client.userprofile.math(key, "+",200, "coins");
 			client.userprofile.set(key, curLevel, "level");
 		  }
+
+		  //checks to see if level is at needed one fornew rank
+		  if(curLevel == 10 ){
+			let addrankup = message.member;
+			message.channel.send("**Congrats!** You've received a new role! You can now claim up to 3 characters!**");
+			let roleName = 'lvl 10'
+			let role = message.guild.roles.find(x => x.name == roleName);
+			if(!role) {
+				message.guild.createRole({
+                    name: roleName
+                });
+			}
+			let lvlRole = message.guild.roles.find(x => x.name == roleName);
+  			addrankup.addRole(lvlRole.id).catch(console.error);
+		  }
+
+		  if(curLevel == 25 ){
+			let addrankup = message.member;
+			message.channel.send("**Congrats!** You've received a new role! You can now claim up to 4 characters!**");
+			let roleName = 'lvl 25'
+			let role = message.guild.roles.find(x => x.name == roleName);
+			if(!role) {
+				message.guild.createRole({
+                    name: roleName
+                });
+			}
+			let lvlRole = message.guild.roles.find(x => x.name == roleName);
+  			addrankup.addRole(lvlRole.id).catch(console.error);
+		  }
 	}
 
 	/******************
@@ -144,8 +200,8 @@ client.on('message', message => {
 
 
 
-	const args = message.content.slice(config.prefix.length).split(' ');
-	//const args = message.content.slice(config.prefix.length).split(/ +/);
+	const args = message.content.slice(config.settings.prefix.length).split(' ');
+	//const args = message.content.slice(config.settings.prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
     //checks for the command within the collection

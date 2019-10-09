@@ -1,18 +1,19 @@
-# DiscordWebsocketTutorial
+# SubiBot
 
-## Video
+## Description
 
-👉 [**VIDEO (German)**](https://youtu.be/LxLob6-8Sl0)
+TODO: write description
 
 ---
 
 ## Used Dependencies
 
 ```
-$ npm install discord.js express express-handlebars body-parser canvas canvas-constructor slot-machine r2 hex-to-rgba form-data replace discord.js-poll-embed
+$ npm install
 ```
 
 - [discord.js](https://www.npmjs.com/package/discord.js)
+- [nodemon](https://www.npmjs.com/package/nodemon)
 - [express](https://www.npmjs.com/package/express)
 - [express-handlebars](https://www.npmjs.com/package/express-handlebars)
 - [body-parser](https://www.npmjs.com/package/body-parser)
@@ -24,15 +25,16 @@ $ npm install discord.js express express-handlebars body-parser canvas canvas-co
 - [hex-to-rgba](https://www.npmjs.com/package/hex-to-rgba)
 - [form-data](https://www.npmjs.com/package/form-data)
 - [replace](https://www.npmjs.com/package/replace)
-- [poll embed](https://www.npmjs.com/package/discord.js-poll-embed)
 
----
 
 ## APIs
 
 - [The Dog API](https://thedogapi.com/)
 - [The Cat API](https://thecatapi.com/)
 - [8ball](https://8ball.delegator.com/)
+
+>The Dog API & Cat API can use the same API key if you wish. These can be set within the config file.
+>8ball is a free json API that does not require a key.
 
 
 ---
@@ -41,13 +43,14 @@ $ npm install discord.js express express-handlebars body-parser canvas canvas-co
 
 Get the repository and set up with:
 ```
-$ git clone https://github.com/zekroTutorials/DiscordWebsocket.git .
+$ git clone https://github.com/kmanago/DiscordWebsocket.git
 $ npm install
 ```
 
 Then, enter your data in the `config.json`.
+>Within the config file you will need to set your API keys as well as your Discord Tokens.
 
 Now, you can start with
 ```
-$ npm test
+$ nodemon main.js
 ```

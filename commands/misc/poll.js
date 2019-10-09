@@ -69,11 +69,15 @@ async function takePoll (message, title, options, timeout, timesync){
            console.log(countdown);
         }
         if(timesync == 'minutes' || timesync == 'minute'){
-            countdown += timeout * (60 * 1000);
+            countdown += timeout  * 60000;
             console.log(countdown);
         }
         if(timesync == 'hours' || timesync == 'hour'){
-            countdown += timeout * (60 * 60 * 1000);
+            countdown += timeout * 3600000;
+            console.log(countdown);
+        }
+        if(timesync == 'days' || timesync == 'day'){
+            countdown += timeout * 86400000;
             console.log(countdown);
         }
        

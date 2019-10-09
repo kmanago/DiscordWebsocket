@@ -21,8 +21,6 @@ module.exports = {
           }
 
           else{
-            //message.member.addRole(role);
-            //message.channel.send("You have been given the new role: " + name);
             allroles.push(role);
             console.log("User added a new role " + name + "to themselves.");
             let user = message.author;
