@@ -2,7 +2,7 @@ module.exports = {
 	name: 'rps',
 	description: 'Rock, Paper, Scissors against the bot. Pick your weapon of choice.',
     category: 'Fun',
-    usage: '!rps <Rock | Paper | Scissors>',
+    usage: '!rps [choice: rock/paper/scissors]',
     args: true,
 	execute(message, args) {
             let choice = args[0];

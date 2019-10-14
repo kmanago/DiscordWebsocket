@@ -4,6 +4,7 @@ module.exports = {
     category: 'Administration',
     usage: '!delrole [role]',
     args: true,
+    guildOnly: true,
     execute(message, args) {
           
         //checks if user who called is a mod role first

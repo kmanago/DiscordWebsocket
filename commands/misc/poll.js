@@ -19,34 +19,37 @@ module.exports = {
 	cooldown: 5,
 	description: 'Creates a timed poll for users to react to with emojis. Can take up to 10 choices for the poll and be forced closed by the caller.',
 	category: 'Misc',
-    usage: '!poll question?, choice1, choice2, choice(n), time number, unit of time (Seconds/Minutes/Hours)',
+    usage: '!poll [question] | [options: choice1, choice2, etc] |[duration s/h/m/d]',
    args: true,
  async execute(message,args) {
 
-    const pollInfo = args.join(" ").split(',');
+    //const pollInfo = args.join(" ").split(',');
+    let str = args.join(' ').split('|');
+    let pollInfo = str.map(Function.prototype.call, String.prototype.trim);
+    console.log(pollInfo);
     const pollTitle = pollInfo[0];
+    console.log('Title: ' + pollTitle);
 
-    pollOptions = new Array ();
-    for(i=1;i<pollInfo.length-2; i++){
-        pollOptions[i-1] = pollInfo[i];
-    }
-    pollTimer = pollInfo[pollInfo.length-2].trim();
-    if(isNaN(pollTimer)){
-        pollTimer = 30;
-    }
+    let str2 = pollInfo[1];
+    let opts = str2.split(" ").join("");
+    const pollOptions = opts.split(',');
+    console.log('Choices: ' + pollOptions);
 
-    const pollTime = pollInfo[pollInfo.length-1].trim();
-    console.log(pollOptions);
+    let duration = pollInfo[2];
+    pollTimer = duration.slice(0, -1);
+    
+    console.log('time #: ' +pollTimer);
+
+    const pollTime = duration.slice(-1);;
+    console.log('time units: '+pollTime);
 
     takePoll(message, pollTitle, pollOptions,pollTimer, pollTime);
     message.reply(takePoll);
-
-// There you go, now you have poll embeds
 	},
 }
 
 async function takePoll (message, title, options, timeout, timesync){
-    //const takePoll = async (message, title, options, timeout = 30, emojiList = defEmojiList.slice(), forceEndPollEmoji = '\u2705') => {
+    
         if (!message && !message.channel) return message.reply('Channel is inaccessible.');
         console.log('\x1b[36m%s\x1b[0m','Channel: ' + message.channel);
         if (!title) return message.reply('Poll title is not given.');
@@ -55,34 +58,36 @@ async function takePoll (message, title, options, timeout, timesync){
         console.log('\x1b[36m%s\x1b[0m','Options: ' +options);
         console.log('\x1b[36m%s\x1b[0m','Timeout: ' +timeout);
         console.log('\x1b[36m%s\x1b[0m','sync:' +timesync);
-        /*if(!timeout){
-            timeout = 30;
-        }*/
+       
         if (options.length < 2) return message.reply('Please provide more than one choice.');
        let emojiList = defEmojiList.slice();
        let forceEndPollEmoji = '\u2705';
-        //if (options.length > emojiList.length) return message.reply(`Please provide ${emojiList.length} or less choices.`);
-    
+        
         var countdown=0;
-        if(timesync === 'seconds'){
+        var unit;
+        if(timesync === 's'){
             countdown += timeout * 1000;
+            unit = 'second(s)'
            console.log(countdown);
         }
-        if(timesync == 'minutes' || timesync == 'minute'){
+        if(timesync == 'm'){
             countdown += timeout  * 60000;
+            unit = 'minute(s)'
             console.log(countdown);
         }
-        if(timesync == 'hours' || timesync == 'hour'){
+        if(timesync == 'h'){
             countdown += timeout * 3600000;
+            unit = 'hour(s)'
             console.log(countdown);
         }
-        if(timesync == 'days' || timesync == 'day'){
+        if(timesync == 'd'){
             countdown += timeout * 86400000;
+            unit = 'day(s)'
             console.log(countdown);
         }
        
 
-        let text = `*To vote, react using the correspoding emoji.\nThe voting will end in **${timeout} ${timesync}**.\nPoll creater can end the poll **forcefully** by reacting to ${forceEndPollEmoji} emoji.*\n\n`;
+        let text = `*To vote, react using the correspoding emoji.\nThe voting will end in **${timeout} ${unit}**.\nPoll creater can end the poll **forcefully** by reacting to ${forceEndPollEmoji} emoji.*\n\n`;
         const emojiInfo = {};
         for (const option of options) {
             const emoji = emojiList.splice(0, 1);
@@ -111,12 +116,10 @@ async function takePoll (message, title, options, timeout, timesync){
         const voterInfo = new Map();
         reactionCollector.on('collect', (reaction, user) => {
             if (usedEmojis.includes(reaction.emoji.name)) {
-                /*if (reaction.emoji.name === forceEndPollEmoji && message.author.id === user.id){
-                    return console.log('this is ending') //reactionCollector.stop();
-                };*/
+                
                 if (!voterInfo.has(user.id)) {
                     voterInfo.set(user.id, { emoji: reaction.emoji.name });
-                //}
+          
                 const votedEmoji = voterInfo.get(user.id).emoji;
                     if (votedEmoji !== reaction.emoji.name) {
                         const lastVote = poll.reactions.get(votedEmoji);
@@ -158,5 +161,4 @@ async function takePoll (message, title, options, timeout, timesync){
         return new RichEmbed()
             .setTitle(`Poll - ${title}`)
             .setFooter(`Poll created by ${author}`);
-    //}
 }

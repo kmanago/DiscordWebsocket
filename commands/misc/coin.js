@@ -2,7 +2,7 @@ module.exports = {
 	name: 'coin',
 	description: 'Flip a coin. Heads or Tails?',
     category: 'Misc',
-    usage: '!coin <Heads | Tails> ',
+    usage: '!coin [choice: heads/tails] ',
     args: true,
 	execute(message, args) {
             let choice = args[0];

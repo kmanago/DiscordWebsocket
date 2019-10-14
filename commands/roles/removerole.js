@@ -5,6 +5,7 @@ module.exports = {
   category: 'Roles',
   usage: '!removerole [role]',
   args: true,
+  guildOnly: true,
   execute(message, args) {
         //let name = args[0];
         let names = args;

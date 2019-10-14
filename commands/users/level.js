@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 
 const config = require('../../config.json');
 let purple = config.colors.purple;
-
 var source = require('../../main.js');
 var userprofile = source.up;
 module.exports = {
@@ -11,14 +10,6 @@ module.exports = {
     category: 'Users',
     usage: '!level',
     async execute(message, args) {
-        /*console.log(userprofile);
-        if(!xp[message.author.id]){
-            xp[message.author.id] = {
-                xp: 0,
-                level: 1
-            };//inner iff
-        }//first if*/
-
         const key = `${message.guild.id}-${message.author.id}`;
 
         let curXP = `${userprofile.get(key, "points")}`;

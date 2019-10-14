@@ -5,6 +5,7 @@ module.exports = {
   category: 'Roles',
   usage: '!unsetrole [role]',
   args: true,
+  guildOnly: true,
   execute(message, args) {
 	
         //a user must be tagged when unsetting roles

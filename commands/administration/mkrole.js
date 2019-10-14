@@ -4,6 +4,7 @@ module.exports = {
   category: 'Administration',
   usage: '!mkrole [role]',
   args: true,
+  guildOnly: true,
   execute(message, args) {
         //gets permissions of caller and check if they're an admin
         let perms = message.member.permissions;

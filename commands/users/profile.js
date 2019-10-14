@@ -1,6 +1,4 @@
-
 const { Canvas } = require("canvas-constructor"); // You can't make images without this.
-const hexToRgba = require("hex-to-rgba");
 const { Attachment } = require("discord.js"); // This is to send the image via discord.
 const fetch = require("node-fetch"); // This is to fetch the user avatar and convert it to a buffer.
 const imageUrlRegex = /\?size=2048$/g;
@@ -11,13 +9,13 @@ var userprofile = source.up;
 
 module.exports = {
     name: 'profile',
-    description: 'Display user profile',
+    description: 'Display profile card of user/mentioned user',
     category: 'Users',
-    usage: '!profile',
+    usage: '!profile <@user>',
     async execute(message, args) {
         //function to create the card
-        async function profile(member, score) {
-            const key = `${message.guild.id}-${message.author.id}`;
+        async function profile(mem) {
+            const key = `${message.guild.id}-${mem.user.id}`;
             // We only need the level, and points values, we don't need the user or guild id.
             const { level, points, bgcolor, maincolor, txtcolor, coins, headerimg, title, info } = userprofile.get(key);
         
@@ -27,7 +25,7 @@ module.exports = {
             // instead of 2048 pixels.
         
             try {
-            const result = await fetch(member.user.displayAvatarURL.replace(imageUrlRegex, "?size=128"));
+            const result = await fetch(mem.user.displayAvatarURL.replace(imageUrlRegex, "?size=128"));
             if (!result.ok) throw new Error("Failed to get the avatar.");
             const avatar = await result.buffer();
 
@@ -38,12 +36,12 @@ module.exports = {
             // The reason for the displayName length check, is we don't want the name of the user going outside
             // the box we're going to be making later, so we grab all the characters from the 0 index through
             // to the 17th index and cut the rest off, then append `...`.
-            const name = member.displayName.length > 20 ? member.displayName.substring(0, 17) + "..." : member.displayName;
+            const name = mem.displayName.length > 20 ? mem.displayName.substring(0, 17) + "..." : mem.displayName;
         
             const filtered = userprofile.filter( p => p.guild === message.guild.id ).array();
             const sorted = filtered.sort((a, b) => b.points - a.points);
-            const mem = message.author.id;
-            const results = sorted.find( ({user}) => user ===  mem);
+            const memU = mem.user.id;
+            const results = sorted.find( ({user}) => user ===  memU);
             const rank = (sorted.indexOf(results)+1);      
 
             const curLevel = Math.floor(0.1 * Math.sqrt(userprofile.get(key, "points")))+1;
@@ -52,7 +50,7 @@ module.exports = {
             const cur = (userprofile.get(key, "points"));
             //const diff = nxt - cur;
             const percentage = (cur/nxt)*380;
-    
+         
             
             /*const upcoming=(curLevel + 1);
             console.log(`next level: ${upcoming}`);
@@ -148,24 +146,81 @@ module.exports = {
         if (message.guild) {
             // This creates a "key" for enmaps Key/Value system.
             // We've declared it as a variable as we'll be using it in multiple places.
-            const key = `${message.guild.id}-${message.author.id}`;
-            // If the points database does not have the message author in the database...
-            if (!userprofile.has(key)) {
-              // Create an entry for them...
-              userprofile.set(key, {
-                // Using the predefined information below.
-                user: message.author.id, guild: message.guild.id, points: 0, level: 1
-              });
+            
+            //no mentioned user
+            if (!message.mentions.users.size) {
+              console.log('no mentioned users so using the person who called it');
+
+              // This creates a "key" for enmaps Key/Value system.
+              // We've declared it as a variable as we'll be using it in multiple places.
+              const key = `${message.guild.id}-${message.author.id}`;
+              // If the points database does not have the message author in the database...
+              if (!userprofile.has(key)) {
+                // Create an entry for them...
+                userprofile.set(key, {
+                  // Using the predefined information below.
+                  user: user.id,
+                  guild: message.guild.id,
+                  points: 10,
+                  level: 1,
+                  coins: 500,
+                  warnlevel: 0,
+                  bgcolor: '#f2f2f2',
+                  maincolor: '#BAF0BA',
+                  txtcolor: '#23272A',
+                  title: 'This is a Title',
+                  info: 'This is some text to act as my own personal status/info/about me. Whatever. Good news! It wraps text on its own.',
+                  headerimg: 'https://pbs.twimg.com/media/CkCp_VhWYAAJcrU.jpg',
+                  lastSeen: new Date()
+                });
+              }
+              // We await both the message.channel.send, and the profile function.
+              // Also remember, we wanted to pass the member object, and the points object.
+              // Since we're creating a user profile, we should give it a unique file name.
+              const buffer = await profile(message.member, userprofile.get(key));
+              const filename = `profile-${message.author.id}.jpg`;
+              const attachment = new Attachment(buffer, filename);
+              await message.channel.send(attachment);
             }
-            // We await both the message.channel.send, and the profile function.
-            // Also remember, we wanted to pass the member object, and the points object.
-            // Since we're creating a user profile, we should give it a unique file name.
-            const buffer = await profile(message.member, userprofile.get(key));
-            const filename = `profile-${message.author.id}.jpg`;
-            const attachment = new Attachment(buffer, filename);
-            await message.channel.send(attachment);
+    
+            //if a user is mentioned
+            else{
+              const user = message.mentions.users.first();
+              const mem = message.mentions.members.first();
+
+            if(!user) return message.reply("You must mention someone or give their ID!"); 
+            const key = `${message.guild.id}-${user.id}`;
+
+              // If the points database does not have the message author in the database...
+              if (!userprofile.has(key)){
+                console.log('no profile for user so we create');
+                userprofile.set(key, {
+                  user: user.id,
+                  guild: message.guild.id,
+                  points: 10,
+                  level: 1,
+                  coins: 500,
+                  warnlevel: 0,
+                  bgcolor: '#f2f2f2',
+                  maincolor: '#BAF0BA',
+                  txtcolor: '#23272A',
+                  title: 'This is a Title',
+                  info: 'This is some text to act as my own personal status/info/about me. Whatever. Good news! It wraps text on its own.',
+                  headerimg: 'https://pbs.twimg.com/media/CkCp_VhWYAAJcrU.jpg',
+                  lastSeen: new Date()
+                  });
+              }
+              // We await both the message.channel.send, and the profile function.
+              // Also remember, we wanted to pass the member object, and the points object.
+              // Since we're creating a user profile, we should give it a unique file name.
+              const buffer = await profile(mem, userprofile.get(key));
+              const filename = `profile-${user.id}.jpg`;
+              const attachment = new Attachment(buffer, filename);
+              await message.channel.send(attachment);
+            }
+
+           
           }
      
     }
 }
-

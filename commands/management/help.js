@@ -1,21 +1,22 @@
-//const { prefix } = require('../../config.json');
+const config = require('../../config.json');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'help',
-	description: 'List all of my commands or info about a specific command.',
+	description: 'List all of my commands or info about a specific command. [required args] & <optionl args>',
 	aliases: ['commands'],
-	category: 'Administration',
-	usage: '!help (command name)',
+	category: 'Management',
+	usage: '!help <command name>',
 	//cooldown: 5,
 	execute(message, args) {
 		console.log ('help is running')
 		const { commands } = message.client;
-		const modules = ['Administration', 'Fun', 'Misc', 'Roles', 'Users']; 
+		const modules = ['Administration', 'Fun', 'Management', 'Misc', 'Roles', 'Users']; 
 		if (!args.length) {
 			const helpEmbed = new Discord.RichEmbed().setAuthor('SubiBot','https://cdn.bulbagarden.net/upload/thumb/a/a1/Substitute_artwork.png/200px-Substitute_artwork.png');
 			helpEmbed.setColor('#BAF0BA');
-			helpEmbed.setDescription('A multi-purpose bot made in node.js. Each command is separated into its respective category. [Arguments] are mandatory. (Arguments) are optional. <Arguments> are the different options.');
+			helpEmbed.setDescription('A multi-purpose bot made in node.js. Each command is separated into its respective category.');
 			helpEmbed.addBlankField();
+			const prefix =config.settings.prefix;
 			//for each module
 			var count = 0;
 			modules.forEach(cat => {
@@ -28,7 +29,7 @@ module.exports = {
 				var cmdNames="";
 				command.forEach(cmd =>{
 					//data.push(cmd.name); //print name of the command
-					cmdNames += cmd.usage + '\n';
+					cmdNames += prefix+cmd.name + '\n';
 				});
 				let allcommands = "```" + cmdNames+ "```";
 				helpEmbed.addField(`__${cat}:__`, allcommands, true);
@@ -36,7 +37,7 @@ module.exports = {
 				//data.push('\n');
 			});	
 			helpEmbed.addBlankField();
-			helpEmbed.setFooter('\nYou can send  \`!help [command name]\` to get info on a specific command!');
+			helpEmbed.setFooter('\nYou can send  \`!help [command name]\` to get info on a specific command and see its usage!');
 			
 			//attempts to send the message as a DM
 			return message.author.send({ embed: helpEmbed })

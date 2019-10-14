@@ -5,8 +5,8 @@ module.exports = {
   category: 'Roles',
   usage: '!addrole [role]',
   args: true,
+  guildOnly: true,
   execute(message, args) {
-        //let name = args[0];
         let names = args;
         let allroles = new Array();
 

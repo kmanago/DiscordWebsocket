@@ -5,7 +5,7 @@ module.exports = {
     description: 'Set different parts of your profile.',
     category: 'Users',
     args: true,
-    usage: '!setprofile [bgcolor colorhex] [maincolor colorhex] [txtcolor colorhex] [headerimg imageurl] [title text] [info text]',
+    usage: '!setprofile [bgcolor colorhex / maincolor colorhex / txtcolor colorhex / headerimg imageurl / title text / info text ]',
     async execute(message, args) {
     const selection = ['bgcolor', 'maincolor', 'txtcolor', 'headerimg', 'title', 'info']; 
     const change = args[0];

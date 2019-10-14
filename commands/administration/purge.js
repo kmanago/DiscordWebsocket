@@ -4,6 +4,7 @@ module.exports = {
 	category: 'Administration',
 	usage: '!purge [# of posts]',
 	args: true,
+	guildOnly: true,
 	execute(message, args) {
 		let perms = message.member.permissions;
 		let hasAdmin = perms.has("ADMINISTRATOR");

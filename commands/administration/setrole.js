@@ -5,6 +5,7 @@ module.exports = {
   category: 'Roles',
   usage: '!setrole [role]',
   args: true,
+  guildOnly: true,
   execute(message, args) {
         //a user must be tagged when setting roles
         let taggedUser = message.mentions.users.first();

@@ -6,48 +6,17 @@ const Enmap = require("enmap");
 
 // load config.json
 const config = require('./config.json');
-//const xp = require('./xp.json');
 
-// Create Discord Bot Client
-//var client = new Client.Client()
-
-/******************
-	 * dashboard
-
-const express = require('express');
-const app = express();
-
-let port = require('./webconfig.json').port || 3000;
-app.set('port', port);
-
-const session = require('express-session');
-
-app.set('view engine', 'ejs');
-app.use(express.static('dashboard'));
-app.use(session({
-    secret: '48738924783748273742398747238',
-    resave: false,
-    saveUninitialized: false,
-    expires: 604800000,
-}));
-require('./router')(app);
-
-app.listen(port, () => console.info(`Listening on port ${port}`));
-
-	 * enddashboard
-	 ******************/
-
-const client = new Discord.Client();
+const client = new Discord.Client({disableEveryone: true});
 
 //create command collection and get all command files
-//client.commands = new Client.Collection();
 client.commands = new Discord.Collection(); // Collection for all commands
 client.aliases = new Discord.Collection(); // Collection for all aliases of every command
 client.userprofile = new Enmap({name: "profile"});
 exports.up = client.userprofile;
 
 
-const modules = ['administration', 'fun', 'misc', 'roles', 'users']; 
+const modules = ['administration', 'fun', 'management', 'misc', 'roles', 'users']; 
 // This will be the list of the names of all modules (folder) your bot owns
 
 modules.forEach(c => {
@@ -135,7 +104,7 @@ client.on('message', message => {
 		 client.userprofile.ensure(key, {
 			user: message.author.id,
 			guild: message.guild.id,
-			points: 0,
+			points: 10,
 			level: 1,
 			coins: 500,
 			warnlevel: 0,
@@ -198,8 +167,6 @@ client.on('message', message => {
 	 * end of enmap xp
 	 ******************/
 
-
-
 	const args = message.content.slice(config.settings.prefix.length).split(' ');
 	//const args = message.content.slice(config.settings.prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
@@ -210,6 +177,10 @@ client.on('message', message => {
 	//const command = client.commands.get(commandName);	
    if (!command) return;
 
+	//checks to make sure this isn't within a DM
+	if (command.guildOnly && message.channel.type !== 'text') {
+		return message.reply('I can\'t execute that command inside DMs!');
+	}
     //checks for command args
     if (command.args && !args.length) {
 		let noID = config.emojis.no;
@@ -219,8 +190,6 @@ client.on('message', message => {
         	reply += `\nThe proper usage would be: \`${command.usage}\``;
 		}
 		
-
-		//return message.channel.send(reply);
 		message.channel.send(reply);
     }
 

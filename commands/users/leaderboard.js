@@ -7,13 +7,14 @@ module.exports = {
     description: '',
     category: 'Users',
     usage: '!leaderboard',
+    guildOnly: true,
     async execute(message, args) {
          // Get a filtered list (for this guild only), and convert to an array while we're at it.
         const filtered = userprofile.filter( p => p.guild === message.guild.id ).array();
 
         // Sort it to get the top results... well... at the top. Y'know.
         const sorted = filtered.sort((a, b) => b.points - a.points);
-        console.log (sorted);
+        //console.log (sorted);
         //sorted.indexof('')
         // Slice it, dice it, get the top 10 of it!
         const top10 = sorted.splice(0, 10);
@@ -27,7 +28,7 @@ module.exports = {
             .setColor(0x00AE86);
             top10.forEach (t => {
                 const mem= message.guild.members.get(t.user);
-                console.log(count);
+               // console.log(count);
                 const name = mem.user.username;
                 const points = t.points;
                 embed.addField('**'+count+'. '+name+'**', `Points: `+ points, true);

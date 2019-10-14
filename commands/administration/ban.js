@@ -1,15 +1,18 @@
 const Discord = require('discord.js');
+const config = require('../../config.json');
 module.exports = {
     name: 'ban',
     description: 'Bans a member from the server. Add a reasoning.',
     category: 'Administration',
     usage: '!ban [@user] [reason]',
     args: true,
+    guildOnly: true,
     execute(message, args) {
 
           //gets permissions of caller and check if they're an admin
           let perms = message.member.permissions;
           let hasAdmin = perms.has("ADMINISTRATOR");
+          let modLogChannel = config.settings.modLogChannel;
           //only executes if user has ADMINISTRATOR permissions
           if(hasAdmin === true){
             if (!message.mentions.users.size) {
@@ -23,7 +26,7 @@ module.exports = {
                 }
 
                 //checks for modlog channel
-                let modlog = message.guild.channels.find('name', 'mod-log');
+                let modlog = message.guild.channels.find(x => x.name === modLogChannel);
                 if (!modlog){
                     return message.reply('I cannot find a mod-log channel.');
                 }

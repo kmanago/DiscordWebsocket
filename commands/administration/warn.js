@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 var source = require('../../main.js');
+const config = require('../../config.json');
 var userprofile = source.up;
 module.exports = {
     name: 'warn',
@@ -7,11 +8,13 @@ module.exports = {
     category: 'Administration',
     usage: '!warn [@user] [reason]',
     args: true,
+    guildOnly: true,
     execute(message, args) {
   
           //gets permissions of caller and check if they're an admin
           let perms = message.member.permissions;
           let hasAdmin = perms.has("ADMINISTRATOR");
+          let modLogChannel = config.settings.modLogChannel;
           //only executes if user has ADMINISTRATOR permissions
           if(hasAdmin === true){
             if (!message.mentions.users.size) {
@@ -25,7 +28,7 @@ module.exports = {
                 }
  
                 //looks for the mod-log channel
-                let modlog = message.guild.channels.find('name', 'mod-log');
+                let modlog = message.guild.channels.find(x => x.name === modLogChannel);
                 if (!modlog){
                     return message.reply('I cannot find a mod-log channel.');
                 }
