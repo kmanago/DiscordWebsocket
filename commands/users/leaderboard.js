@@ -31,7 +31,18 @@ module.exports = {
                // console.log(count);
                 const name = mem.user.username;
                 const points = t.points;
-                embed.addField('**'+count+'. '+name+'**', `Points: `+ points, true);
+                if(count==1){
+                    embed.addField('** :first_place: '+count+'. '+name+'**', `Points: `+ points, true);
+                }
+                else if(count==2){
+                    embed.addField('** :second_place: '+count+'. '+name+'**', `Points: `+ points, true);
+                }
+                else if(count==3){
+                    embed.addField('** :third_place: '+count+'. '+name+'**', `Points: `+ points, true);
+                }
+                else{
+                    embed.addField('**'+count+'. '+name+'**', `Points: `+ points, true);
+                }
                 count++;
             });
        return message.channel.send({embed});

@@ -12,6 +12,7 @@ const client = new Discord.Client({disableEveryone: true});
 //create command collection and get all command files
 client.commands = new Discord.Collection(); // Collection for all commands
 client.aliases = new Discord.Collection(); // Collection for all aliases of every command
+
 client.userprofile = new Enmap({name: "profile"});
 exports.up = client.userprofile;
 
@@ -36,6 +37,17 @@ modules.forEach(c => {
 
 // inject config into client instance object
 client.config = config;
+
+
+//client.allowedChannels = new Discord.Collection(); // Collection channels that points to be earned
+const channels = require('./channels.json');
+const ac = channels.allowed;
+var count = ac.length;
+
+const levels = require('./levels.json');
+const lvls = levels.newrole;
+var count2 = lvls.length;
+
 
 // Create Websocket instance with token '123456',
 // port 5665 and passing the discord client instance
@@ -117,50 +129,97 @@ client.on('message', message => {
 			lastSeen: new Date()
 		  });
 		  //client.userprofile.inc(key, "points");
-		  const newpoints = Math.floor(Math.random()*7)+ 15;
+		  //var newpoints=0;
 		  const newcoins = Math.floor(Math.random()*7)+ 8;
-		  client.userprofile.math(key, "+",newpoints, "points");
 		  client.userprofile.math(key, "+",newcoins, "coins");
 
-		  // Calculate the user's current level
-		  const curLevel = Math.floor(0.1 * Math.sqrt(client.userprofile.get(key, "points")))+1;
+		  if(ac.length === 0){
+			 const newpoints = Math.floor(Math.random()*7)+ 15;
+			 client.userprofile.math(key, "+",newpoints, "points");
+
+			 // Calculate the user's current level
+			 const curLevel = Math.floor(0.1 * Math.sqrt(client.userprofile.get(key, "points")))+1;
     
-		  // Act upon level up by sending a message and updating the user's level in enmap.
-		  if (client.userprofile.get(key, "level") < curLevel) {
-			let lvlID = config.emojis.lvlup;
-			message.reply(`${lvlID}**Congrats!** You've leveled up to **Level ${curLevel}**! Keep going!`);
-			client.userprofile.math(key, "+",200, "coins");
-			client.userprofile.set(key, curLevel, "level");
-		  }
-
-		  //checks to see if level is at needed one fornew rank
-		  if(curLevel == 10 ){
-			let addrankup = message.member;
-			message.channel.send("**Congrats!** You've received a new role! You can now claim up to 3 characters!**");
-			let roleName = 'lvl 10'
-			let role = message.guild.roles.find(x => x.name == roleName);
-			if(!role) {
-				message.guild.createRole({
-                    name: roleName
-                });
+			 // Act upon level up by sending a message and updating the user's level in enmap.
+			 if (client.userprofile.get(key, "level") < curLevel) {
+			   let lvlID = config.emojis.lvlup;
+			   message.reply(`${lvlID}**Congrats!** You've leveled up to **Level ${curLevel}**! Keep going!`);
+			   client.userprofile.math(key, "+",200, "coins");
+			   client.userprofile.set(key, curLevel, "level");
+			 }
+   
+			 //checks to see if level is at needed one fornew rank
+			 if(curLevel == 5 ){
+			   let addrankup = message.member;
+			   let roleName = 'lvl 5'
+			   let role = message.guild.roles.find(x => x.name == roleName);
+			   if(!role) {
+				   message.guild.createRole({
+					   name: roleName
+				   });
+			   }
+			   let lvlRole = message.guild.roles.find(x => x.name == roleName);
+			   if(message.member.roles.has(lvlRole.id)){
+				//do nothing
 			}
-			let lvlRole = message.guild.roles.find(x => x.name == roleName);
-  			addrankup.addRole(lvlRole.id).catch(console.error);
-		  }
-
-		  if(curLevel == 25 ){
-			let addrankup = message.member;
-			message.channel.send("**Congrats!** You've received a new role! You can now claim up to 4 characters!**");
-			let roleName = 'lvl 25'
-			let role = message.guild.roles.find(x => x.name == roleName);
-			if(!role) {
-				message.guild.createRole({
-                    name: roleName
-                });
+			else{
+				message.channel.send("**Congrats!** You've received a new role!**");
+				addrankup.addRole(lvlRole.id).catch(console.error);
 			}
-			let lvlRole = message.guild.roles.find(x => x.name == roleName);
-  			addrankup.addRole(lvlRole.id).catch(console.error);
+			 }
+		  }//end of ac.length
+		  
+		  else{
+			for(i=0;i<count;i++){
+				//console.log(ac[i].name)
+				var name = ac[i].name;
+				if(message.channel.name === name){
+					const newpoints = Math.floor(Math.random()*7)+ 15;
+			 		client.userprofile.math(key, "+",newpoints, "points");
+				}
+			}//end of for loop
+
+			 // Calculate the user's current level
+			 const curLevel = Math.floor(0.1 * Math.sqrt(client.userprofile.get(key, "points")))+1;
+    
+			 // Act upon level up by sending a message and updating the user's level in enmap.
+			 if (client.userprofile.get(key, "level") < curLevel) {
+			   let lvlID = config.emojis.lvlup;
+			   message.reply(`${lvlID}**Congrats!** You've leveled up to **Level ${curLevel}**! Keep going!`);
+			   client.userprofile.math(key, "+",200, "coins");
+			   client.userprofile.set(key, curLevel, "level");
+			 }
+
+			for(i=0;i<count2;i++){
+				//console.log(ac[i].name)
+				//console.log(lvls[i].level)
+				var level = lvls[i].level;
+				var lvlName = lvls[i].rolename;
+				if(curLevel == level){
+					let addrankup = message.member;
+					let roleName = `${lvlName}`
+					
+					let role = message.guild.roles.find(x => x.name == roleName);
+					if(!role) {
+						message.guild.createRole({
+							name: roleName
+						});
+					}
+					let lvlRole = message.guild.roles.find(x => x.name == roleName);
+					if(message.member.roles.has(lvlRole.id)){
+						//do nothing
+					}
+					else{
+						message.channel.send("**Congrats!** You've received a new role!**");
+						addrankup.addRole(lvlRole.id).catch(console.error);
+					}
+					
+				}
+			}//end of for loop
 		  }
+		  
+
+		  
 	}
 
 	/******************
