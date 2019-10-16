@@ -16,7 +16,7 @@ client.userprofile = new Enmap({name: "profile"});
 exports.up = client.userprofile;
 
 
-const modules = ['administration', 'fun', 'management', 'misc', 'roles', 'users']; 
+const modules = ['Administration', 'Fun', 'Management', 'Moderation', 'Misc', 'Roles', 'Users']; 
 // This will be the list of the names of all modules (folder) your bot owns
 
 modules.forEach(c => {

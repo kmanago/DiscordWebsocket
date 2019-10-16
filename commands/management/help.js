@@ -10,7 +10,7 @@ module.exports = {
 	execute(message, args) {
 		console.log ('help is running')
 		const { commands } = message.client;
-		const modules = ['Administration', 'Fun', 'Management', 'Misc', 'Roles', 'Users']; 
+		const modules = ['Administration', 'Fun', 'Management', 'Moderation', 'Misc', 'Roles', 'Users']; 
 		if (!args.length) {
 			const helpEmbed = new Discord.RichEmbed().setAuthor('SubiBot','https://cdn.bulbagarden.net/upload/thumb/a/a1/Substitute_artwork.png/200px-Substitute_artwork.png');
 			helpEmbed.setColor('#BAF0BA');

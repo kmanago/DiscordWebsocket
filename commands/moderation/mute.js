@@ -2,9 +2,9 @@ const Discord = require('discord.js');
 const config = require('../../config.json');
 module.exports = {
     name: 'mute',
-    description: 'Mutes a member. Add a reasoning.',
-    category: 'Administration',
-    usage: '!mute [@user] "[reason]" | <duration s/h/m/d>',
+    description: 'Mutes a member in the server with a reasoning. You must have the ADMINISTRATOR permissions to run the command.',
+    category: 'Moderation',
+    usage: '!mute [@user] [reason] | <duration s/h/m/d>',
     args: true,
     guildOnly: true,
    async execute(message, args) {
@@ -16,7 +16,7 @@ module.exports = {
           //only executes if user has ADMINISTRATOR permissions
           if(hasAdmin === true){
             if (!message.mentions.users.size) {
-                return message.reply('you need to tag a user in order to kick them!');
+                return message.reply('you need to tag a user in order to mute them!');
             }
             else{
                 let taggedUser = message.mentions.users.first();
@@ -39,7 +39,7 @@ module.exports = {
                 const reason = array[0];
                 const duration = array [1];
                 if(!reason){
-                   return message.reply('You must supply a reason for kicking.');
+                   return message.reply('You must supply a reason for muting.');
                 }
               
 

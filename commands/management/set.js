@@ -14,7 +14,7 @@ const defaultGoodbye = "Goodbye {member}/ We understand you have to continue tha
 
 module.exports = {
     name: 'set',
-    description: 'View or change settings for your server. To view current settings, call set without any arguments. Can only be ran by those with ADMINISTRATOR role.',
+    description: 'View or change settings for your server. To view current settings, call set without any arguments. You must have the ADMINISTRATOR permissions to run the command.',
     category: 'Management',
     usage: '!set [action: edit/reset/del] [key value]',
     guildOnly: true,

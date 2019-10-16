@@ -1,11 +1,10 @@
 const Discord = require('discord.js');
 const config = require('../../config.json');
-
 module.exports = {
-    name: 'unban',
-    description: 'Unbans a member from the server. Add a reasoning.',
-    category: 'Administration',
-    usage: '!unban [user id] [reason]',
+    name: 'ban',
+    description: 'Bans a member from the server with a reasoning. You must have the ADMINISTRATOR permissions to run the command.',
+    category: 'Moderation',
+    usage: '!ban [@user] [reason]',
     args: true,
     guildOnly: true,
     execute(message, args) {
@@ -17,13 +16,13 @@ module.exports = {
           //only executes if user has ADMINISTRATOR permissions
           if(hasAdmin === true){
             if (!message.mentions.users.size) {
-                return message.reply('you need to tag a user in order to kick them!');
+                return message.reply('you need to tag a user in order to ban them!');
             }
             else{
-                let statedUser = args [0];
+                let taggedUser = message.mentions.users.first();
               
-                if(!statedUser){
-                    return message.reply("You must supply a User Resolvable, such as a user id. Check the previous logs for user ids.")
+                if(!taggedUser){
+                    return message.reply("Please mention a valid user!")
                 }
 
                 //checks for modlog channel
@@ -34,19 +33,25 @@ module.exports = {
 
                 let reason = args.slice(1).join(' ');
                 if(!reason){
-                   return message.reply('You must supply a reason for kicking.');
+                   return message.reply('You must supply a reason for banning.');
+                }
+
+                //makes sure the member is kickable
+                if (!message.guild.member(taggedUser).bannable){
+                    return message.reply('I cannot ban that member.');
                 }
 
                 //ban the member and supply it to the log
-                message.guild.member(statedUser).unban(reason);
+                message.guild.member(taggedUser).ban(reason);
                 const embed = new Discord.RichEmbed()
                 .setColor(0x00AE86)
                 .setTimestamp()
-                .addField('Action:', 'Unban')
-                .addField('User:', `${statedUser.username}#${statedUser.discriminator} (${statedUser.id})`)
+                .addField('Action:', 'Ban')
+                .addField('User:', `${taggedUser.username}#${taggedUser.discriminator} (${taggedUser.id})`)
                 .addField('Moderator:', `${message.author.username}#${message.author.discriminator}`)
                 .addField('Reason', reason);
-                return message.guild.channels.get(modlog.id).sendEmbed(embed);
+                message.guild.member(taggedUser).send(embed);
+                return message.guild.channels.get(modlog.id).send(embed);
             }    
              
               

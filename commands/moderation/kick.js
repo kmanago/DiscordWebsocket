@@ -1,14 +1,13 @@
 const Discord = require('discord.js');
 const config = require('../../config.json');
 module.exports = {
-    name: 'ban',
-    description: 'Bans a member from the server. Add a reasoning.',
-    category: 'Administration',
-    usage: '!ban [@user] [reason]',
+    name: 'kick',
+    description: 'Kicks a member from the serverwith a reasoning. You must have the ADMINISTRATOR permissions to run the command.',
+    category: 'Moderation',
+    usage: '!kick [@user] [reason]',
     args: true,
-    guildOnly: true,
     execute(message, args) {
-
+  
           //gets permissions of caller and check if they're an admin
           let perms = message.member.permissions;
           let hasAdmin = perms.has("ADMINISTRATOR");
@@ -20,12 +19,12 @@ module.exports = {
             }
             else{
                 let taggedUser = message.mentions.users.first();
-              
+                
                 if(!taggedUser){
                     return message.reply("Please mention a valid user!")
                 }
-
-                //checks for modlog channel
+ 
+                //looks for the mod-log channel
                 let modlog = message.guild.channels.find(x => x.name === modLogChannel);
                 if (!modlog){
                     return message.reply('I cannot find a mod-log channel.');
@@ -37,28 +36,27 @@ module.exports = {
                 }
 
                 //makes sure the member is kickable
-                if (!message.guild.member(taggedUser).bannable){
-                    return message.reply('I cannot ban that member.');
+                if (!message.guild.member(taggedUser).kickable){
+                    return message.reply('I cannot kick that member');
                 }
 
-                //ban the member and supply it to the log
-                message.guild.member(taggedUser).ban(reason);
+                //kick the member and supply it to the mod-log
+                message.guild.member(taggedUser).kick(reason);
                 const embed = new Discord.RichEmbed()
                 .setColor(0x00AE86)
                 .setTimestamp()
-                .addField('Action:', 'Ban')
+                .addField('Action:', 'Kick')
                 .addField('User:', `${taggedUser.username}#${taggedUser.discriminator} (${taggedUser.id})`)
                 .addField('Moderator:', `${message.author.username}#${message.author.discriminator}`)
                 .addField('Reason', reason);
                 message.guild.member(taggedUser).send(embed);
                 return message.guild.channels.get(modlog.id).send(embed);
-            }    
-             
-              
+            }      
           }
+
           else{
-              message.channel.send("You don't have permissions to do this action!");
-              console.log("User attempted to ban a member but doesn't have required permissions.");
+            message.channel.send(":no_entry: | ***You don't have permissions to do this action!***");
+              console.log("User attempted to kick a member but doesn't have required permissions.");
           }
         
       },

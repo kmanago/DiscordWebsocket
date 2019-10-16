@@ -3,7 +3,7 @@ var userprofile = source.up;
 
 module.exports = {
     name: 'cleanup',
-    description: 'Cleans up the data of old users.',
+    description: 'Cleans up the data of old users. You must have the ADMINISTRATOR permissions to run the command.',
     category: 'Management',
     usage: '!cleanup <all>',
     guildOnly: true,

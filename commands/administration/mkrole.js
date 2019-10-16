@@ -1,3 +1,4 @@
+const config = require('../../config.json');
 module.exports = {
   name: 'mkrole',
   description: 'Creates a new role. You must have the ADMINISTRATOR permissions to run the command.',
@@ -17,8 +18,8 @@ module.exports = {
                 message.guild.createRole({
                     name: name
                 })
-                .then(role => console.log(`Created new role with name ${role.name}`),
-                    message.channel.send('New role **' + name + '** was created. Set the role\'s properties under settings.\n')
+                .then(role => console.log(`Created role ${role.name}.`),
+                    message.channel.send(config.emojis.yes + ' | The role **' + name + '** was **created. Set the role\'s properties under settings.**\n')
                 )
                 .catch(console.error);
             });//end of foreach

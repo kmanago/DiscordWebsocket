@@ -1,3 +1,4 @@
+const config = require('../../config.json');
 module.exports = {
     name: 'delrole',
     description: 'Deletes the specified role. You must have the ADMINISTRATOR permissions to run the command.',
@@ -15,7 +16,7 @@ module.exports = {
                 names.forEach(name => {
                 message.guild.roles.find(role => role.name === name).delete()
                 .then(deleted => console.log(`Deleted role ${deleted.name}.`),
-                    message.channel.send('The role ' + '**'+name+'**' + ' was deleted.')
+                    message.channel.send(config.emojis.yes + ' | The role ' + '**'+name+'**' + ' was **deleted**.')
                 )
                 .catch(console.error);
             });

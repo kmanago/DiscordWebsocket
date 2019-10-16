@@ -6,7 +6,7 @@ var userprofile = source.up;
 module.exports = {
     name: 'warnlevel',
     description: 'Shows the warning level of a user/mentioned user',
-    category: 'Users',
+    category: 'Moderation',
     usage: '!warnlevel <@user>',
     async execute(message, args) {
         if (!message.mentions.users.size) {
