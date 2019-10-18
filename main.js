@@ -7,6 +7,82 @@ const Enmap = require("enmap");
 // load config.json
 const config = require('./config.json');
 
+
+/*
+var app = require('./app');
+var debug = require('debug')('mywebsite:server');
+var http = require('http');
+
+
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+
+
+var server = http.createServer(app);
+
+
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+*/
+
+
 const client = new Discord.Client({disableEveryone: true});
 
 //create command collection and get all command files
@@ -72,7 +148,7 @@ client.on("guildMemberAdd", (member) => {
 	let guild = member.guild;
 		//channel.send(`Welcome ${member} to ${guild}!! ` + config.welcome);
 		//channel.send(config.welcome);
-		var wel = config.welcome;
+		var wel = config.settings.welcome;
 		var str = wel.replace(/{member}/g, `${member}`);
 		var welcome = str.replace(/{server}/g, `**${guild}**`);
 		channel.send(welcome);
@@ -87,7 +163,7 @@ client.on("guildMemberAdd", (member) => {
 
 		//get server and set the goodbye message up with the correct inputs
 		let guild = member.guild;
-		var gb = config.goodbye;
+		var gb = config.settings.goodbye;
 		var str = gb.replace(/{member}/g, `${member}`);
 		var goodbye = str.replace(/{server}/g, `${guild}`);
 		channel.send(goodbye);
